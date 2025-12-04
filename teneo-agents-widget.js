@@ -18,20 +18,25 @@
             color: #ffffff;
             background: transparent;
             width: 100%;
+            max-width: 1400px;
             margin: 0 auto;
+            padding: 0 20px;
             overflow-x: auto;
         }
 
         .teneo-widget-section {
-            margin-bottom: 2rem;
+            margin-bottom: 4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .teneo-widget-section-title {
-            font-size: 1.5rem;
+            font-size: 3rem;
             font-weight: 600;
             color: #f3f4f6;
-            margin-bottom: 1rem;
-            text-align: left;
+            margin-bottom: 2rem;
+            text-align: center;
         }
 
         /* Grid Container - Frame 1261156334 */
