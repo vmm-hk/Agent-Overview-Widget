@@ -54,7 +54,7 @@
             padding: 0px;
             gap: 12px;
             width: 100%;
-            height: 18px;
+            height: 26px;
         }
 
         .teneo-widget-search-icon {
@@ -92,12 +92,12 @@
 
         .teneo-widget-search-input {
             width: 100%;
-            height: 16px;
+            height: 26px;
             font-family: 'PP Neue Montreal';
             font-style: normal;
             font-weight: 400;
             font-size: 20px;
-            line-height: 16px;
+            line-height: 26px;
             color: #FAFCFC;
             background: transparent;
             border: none;
@@ -253,17 +253,18 @@
         /* X - Agent Initial */
         .teneo-widget-initials-text {
             position: absolute;
-            width: 40.71px;
-            height: 49.76px;
-            left: 4.52px;
-            top: 0px;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
             font-family: 'PP Neue Montreal';
             font-style: normal;
             font-weight: 500;
-            font-size: 33.1709px;
-            line-height: 180%;
+            font-size: 26px;
+            line-height: 1;
             display: flex;
             align-items: center;
+            justify-content: center;
             text-align: center;
             color: #000000;
         }
@@ -970,7 +971,7 @@
             this.filteredAgents = [];
             this.highlightedAgents = [];
             this.imageLoadStatus = new Map();
-            this.showingMore = false;
+            this.moreAgentsCount = 6; // Start with 6 agents in "More Agents" section
             this.showingMoreManage = false;
             
             this.init();
@@ -1184,8 +1185,9 @@
             const remainingAgents = [];
             
             // First, collect popular agents in the specified order
+            // Match against agent_id (string) not id (numeric)
             for (const id of popularIds) {
-                const agent = this.filteredAgents.find(a => a.id === id);
+                const agent = this.filteredAgents.find(a => a.agent_id === id);
                 if (agent) {
                     popularAgents.push(agent);
                 }
@@ -1193,7 +1195,7 @@
             
             // Then collect remaining agents (excluding popular ones)
             for (const agent of this.filteredAgents) {
-                if (!popularIds.includes(agent.id)) {
+                if (!popularIds.includes(agent.agent_id)) {
                     remainingAgents.push(agent);
                 }
             }
@@ -1208,15 +1210,13 @@
             this.renderAgentGrid('popular-grid', popularAgents);
             
             // Render more agents from remaining agents
-            const moreAgentsStart = 0;
-            const moreAgentsEnd = this.showingMore ? this.options.maxAgents : 6;
-            const moreAgents = remainingAgents.slice(moreAgentsStart, moreAgentsEnd);
+            const moreAgents = remainingAgents.slice(0, this.moreAgentsCount);
             this.renderAgentGrid('more-grid', moreAgents);
             
             const loadMoreBtn = document.getElementById('load-more');
             if (loadMoreBtn) {
-                const hasMoreAgents = remainingAgents.length > moreAgentsEnd;
-                loadMoreBtn.style.display = hasMoreAgents && !this.showingMore ? 'block' : 'none';
+                const hasMoreAgents = remainingAgents.length > this.moreAgentsCount;
+                loadMoreBtn.style.display = hasMoreAgents ? 'block' : 'none';
             }
         }
 
@@ -1357,7 +1357,8 @@
         }
 
         showMoreAgents() {
-            this.showingMore = true;
+            // Increment by 6 more agents each time
+            this.moreAgentsCount += 6;
             this.renderAgents();
         }
 
@@ -1522,8 +1523,24 @@
 
         async loadImageWithFallback(imageInfo, imgElement) {
             if (!imageInfo.isIpfs) {
-                imgElement.src = imageInfo.url;
-                return;
+                // For non-IPFS URLs, verify the image loads before setting it
+                return new Promise((resolve, reject) => {
+                    const testImg = new Image();
+                    const timeout = setTimeout(() => reject(new Error('Timeout')), 5000);
+                    
+                    testImg.onload = () => {
+                        clearTimeout(timeout);
+                        imgElement.src = imageInfo.url;
+                        resolve();
+                    };
+                    
+                    testImg.onerror = () => {
+                        clearTimeout(timeout);
+                        reject(new Error('Load failed'));
+                    };
+                    
+                    testImg.src = imageInfo.url;
+                });
             }
 
             for (const gateway of imageInfo.gateways) {
