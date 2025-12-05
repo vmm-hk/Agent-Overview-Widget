@@ -121,7 +121,7 @@
             width: 409px;
             height: 115px;
             font-family: 'PP Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            font-weight: 400;
+            font-weight: 300;
             font-style: normal;
             font-size: 64px;
             line-height: 180%;
@@ -134,6 +134,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         /* Grid Container - Frame 1261156334 */
