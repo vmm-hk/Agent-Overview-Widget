@@ -118,11 +118,22 @@
         }
 
         .teneo-widget-section-title {
-            font-size: 3rem;
-            font-weight: 600;
-            color: #f3f4f6;
-            margin-bottom: 2rem;
+            width: 409px;
+            height: 115px;
+            font-family: 'PP Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 64px;
+            line-height: 180%;
+            letter-spacing: 0;
             text-align: center;
+            color: #FFFFFF;
+            background: transparent;
+            opacity: 1;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Grid Container - Frame 1261156334 */
