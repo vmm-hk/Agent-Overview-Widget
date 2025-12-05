@@ -8,7 +8,15 @@
         maxAgents: 12,
         showSearch: true,
         showPopularSection: true,
-        adminApiUrl: null
+        adminApiUrl: null,
+        popularAgentIds: [
+            'instagram',
+            'google-maps',
+            'x-agent-enterprise-v2',
+            'tiktok',
+            'amazon',
+            'youtube-agent-new'
+        ]
     };
 
     // CSS styles matching exact Figma specifications
@@ -1170,18 +1178,44 @@
             return score;
         }
 
+        getPopularAgents() {
+            const popularIds = this.options.popularAgentIds || [];
+            const popularAgents = [];
+            const remainingAgents = [];
+            
+            // First, collect popular agents in the specified order
+            for (const id of popularIds) {
+                const agent = this.filteredAgents.find(a => a.id === id);
+                if (agent) {
+                    popularAgents.push(agent);
+                }
+            }
+            
+            // Then collect remaining agents (excluding popular ones)
+            for (const agent of this.filteredAgents) {
+                if (!popularIds.includes(agent.id)) {
+                    remainingAgents.push(agent);
+                }
+            }
+            
+            return { popularAgents, remainingAgents };
+        }
+
         renderAgents() {
-            const popularAgents = this.filteredAgents.slice(0, 6);
+            const { popularAgents, remainingAgents } = this.getPopularAgents();
+            
+            // Render popular agents
             this.renderAgentGrid('popular-grid', popularAgents);
             
-            const moreAgentsStart = 6;
-            const moreAgentsEnd = this.showingMore ? this.options.maxAgents : 12;
-            const moreAgents = this.filteredAgents.slice(moreAgentsStart, moreAgentsEnd);
+            // Render more agents from remaining agents
+            const moreAgentsStart = 0;
+            const moreAgentsEnd = this.showingMore ? this.options.maxAgents : 6;
+            const moreAgents = remainingAgents.slice(moreAgentsStart, moreAgentsEnd);
             this.renderAgentGrid('more-grid', moreAgents);
             
             const loadMoreBtn = document.getElementById('load-more');
             if (loadMoreBtn) {
-                const hasMoreAgents = this.filteredAgents.length > moreAgentsEnd;
+                const hasMoreAgents = remainingAgents.length > moreAgentsEnd;
                 loadMoreBtn.style.display = hasMoreAgents && !this.showingMore ? 'block' : 'none';
             }
         }
@@ -1343,17 +1377,20 @@
         }
 
         renderManageAgents() {
-            const popularAgents = this.filteredAgents.slice(0, 6);
+            const { popularAgents, remainingAgents } = this.getPopularAgents();
+            
+            // Render popular agents
             this.renderManageAgentGrid('teneo-manage-popular-grid', popularAgents);
             
-            const moreAgentsStart = 6;
-            const moreAgentsEnd = this.showingMoreManage ? this.options.maxAgents : 12;
-            const moreAgents = this.filteredAgents.slice(moreAgentsStart, moreAgentsEnd);
+            // Render more agents from remaining agents
+            const moreAgentsStart = 0;
+            const moreAgentsEnd = this.showingMoreManage ? this.options.maxAgents : 6;
+            const moreAgents = remainingAgents.slice(moreAgentsStart, moreAgentsEnd);
             this.renderManageAgentGrid('teneo-manage-more-grid', moreAgents);
             
             const loadMoreBtn = document.getElementById('teneo-manage-load-more');
             if (loadMoreBtn) {
-                const hasMoreAgents = this.filteredAgents.length > moreAgentsEnd;
+                const hasMoreAgents = remainingAgents.length > moreAgentsEnd;
                 loadMoreBtn.style.display = hasMoreAgents && !this.showingMoreManage ? 'flex' : 'none';
             }
         }
