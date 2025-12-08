@@ -561,6 +561,27 @@
             }
         }
 
+        @media (max-width: 768px) {
+            .teneo-widget-container {
+                padding: 0 20px;
+            }
+            
+            .teneo-widget-section-title {
+                width: 100%;
+                min-width: auto;
+                max-width: 100%;
+                font-size: 48px;
+                padding: 0 20px;
+                box-sizing: border-box;
+            }
+            
+            .teneo-widget-search-row {
+                margin-left: 0;
+                margin-right: 0;
+                padding: 12px;
+            }
+        }
+
         @media (max-width: 468px) {
             .teneo-widget-grid {
                 grid-template-columns: 1fr;
@@ -571,6 +592,11 @@
             .teneo-widget-card {
                 width: 100%;
                 max-width: 424px;
+            }
+            
+            .teneo-widget-section-title {
+                font-size: 40px;
+                padding: 0 15px;
             }
         }
 
