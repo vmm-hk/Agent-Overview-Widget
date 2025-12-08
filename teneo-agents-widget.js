@@ -22,7 +22,7 @@
     // CSS styles matching exact Figma specifications
     const widgetCSS = `
         .teneo-widget-container {
-            font-family: 'PP Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: #ffffff;
             background: transparent;
             width: 100%;
@@ -93,7 +93,7 @@
         .teneo-widget-search-input {
             width: 100%;
             height: 26px;
-            font-family: 'PP Neue Montreal';
+            font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 20px;
@@ -118,9 +118,10 @@
         }
 
         .teneo-widget-section-title {
-            width: 409px;
+            width: auto;
+            min-width: 500px;
             height: 115px;
-            font-family: 'PP Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             font-weight: 300;
             font-style: normal;
             font-size: 64px;
@@ -135,7 +136,7 @@
             align-items: center;
             justify-content: center;
             white-space: nowrap;
-            overflow: hidden;
+            overflow: visible;
         }
 
         /* Grid Container - Frame 1261156334 */
@@ -270,7 +271,7 @@
             height: 100%;
             left: 0;
             top: 0;
-            font-family: 'PP Neue Montreal';
+            font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 500;
             font-size: 26px;
@@ -312,7 +313,7 @@
         .teneo-widget-name {
             width: 117.28px;
             height: 23.69px;
-            font-family: 'PP Neue Montreal';
+            font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 500;
             font-size: 20px;
@@ -345,7 +346,7 @@
         .teneo-widget-creator {
             width: 83px;
             height: 25px;
-            font-family: 'PP Neue Montreal';
+            font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 14px;
@@ -397,7 +398,7 @@
         /* Online/Offline Text */
         .teneo-widget-status-label {
             height: 25px;
-            font-family: 'PP Neue Montreal';
+            font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 14px;
@@ -421,7 +422,7 @@
         .teneo-widget-description {
             width: 367.14px;
             height: 120px;
-            font-family: 'PP Neue Montreal';
+            font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 16px;
@@ -479,7 +480,7 @@
             height: 26px;
             left: 0px;
             top: 1.21px;
-            font-family: 'PP Neue Montreal';
+            font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 14.2161px;
@@ -657,7 +658,7 @@
         .teneo-manage-popup-search-input {
             width: 135px;
             height: 16px;
-            font-family: 'PP Neue Montreal';
+            font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 20px;
@@ -737,7 +738,7 @@
         .teneo-manage-popup-filter-label {
             width: 42px;
             height: 16px;
-            font-family: 'PP Neue Montreal';
+            font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 20px;
@@ -767,7 +768,7 @@
         .teneo-manage-popup-title {
             width: 409px;
             height: 115px;
-            font-family: 'PP Neue Montreal';
+            font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 64px;
@@ -832,7 +833,7 @@
         .teneo-manage-popup-more-title {
             width: 345px;
             height: 115px;
-            font-family: 'PP Neue Montreal';
+            font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 64px;
@@ -898,7 +899,7 @@
         .teneo-manage-popup-load-more-text {
             width: 86px;
             height: 19px;
-            font-family: 'PP Neue Montreal';
+            font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 18.9548px;
@@ -999,6 +1000,26 @@
         }
 
         injectCSS() {
+            // Load Inter font from Google Fonts
+            if (!document.getElementById('teneo-widget-fonts')) {
+                const fontLink = document.createElement('link');
+                fontLink.id = 'teneo-widget-fonts';
+                fontLink.rel = 'preconnect';
+                fontLink.href = 'https://fonts.googleapis.com';
+                document.head.appendChild(fontLink);
+                
+                const fontLink2 = document.createElement('link');
+                fontLink2.rel = 'preconnect';
+                fontLink2.href = 'https://fonts.gstatic.com';
+                fontLink2.crossOrigin = 'anonymous';
+                document.head.appendChild(fontLink2);
+                
+                const fontLink3 = document.createElement('link');
+                fontLink3.rel = 'stylesheet';
+                fontLink3.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap';
+                document.head.appendChild(fontLink3);
+            }
+            
             if (!document.getElementById('teneo-widget-styles')) {
                 const style = document.createElement('style');
                 style.id = 'teneo-widget-styles';
