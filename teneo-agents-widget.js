@@ -530,7 +530,7 @@
 
         .teneo-widget-load-more-btn {
             padding: 14.2161px 20px;
-            background: #050506;
+            background: #25272B;
             border: 1px solid #222222;
             border-radius: 0px;
             color: #FAFCFC;
@@ -548,8 +548,7 @@
         }
 
         .teneo-widget-load-more-btn:hover {
-            background: #0a0a0b;
-            border-color: #333333;
+            background: #2d3135;
         }
 
         /* Responsive */
@@ -883,25 +882,21 @@
         /* Load More Frame */
         .teneo-manage-popup-load-more-frame {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             justify-content: center;
             align-items: center;
-            padding: 64px 201px;
-            gap: 82px;
-            width: 1728px;
-            max-width: 100%;
-            height: auto;
-            min-height: auto;
-            background: transparent;
+            padding: 0px;
+            gap: 15.4px;
+            width: 385.0196533203125px;
+            height: 59.23379135131836px;
+            background: #25272B;
             flex: none;
             order: 5;
             flex-grow: 0;
             z-index: 5;
             opacity: 1;
-            border: 1px solid transparent;
             box-sizing: border-box;
             margin: 0 auto;
-            text-align: center;
         }
 
         /* Load More Row */
@@ -910,24 +905,22 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 14.2161px 20px;
-            gap: 0px;
-            width: auto;
-            height: auto;
-            background: #050506;
-            border-radius: 0px;
+            padding: 14.2161px;
+            gap: 9.48px;
+            width: 137.42px;
+            height: 59.23px;
+            background: #25272B;
+            border-radius: 5.92338px;
             flex: none;
             order: 0;
             flex-grow: 0;
             cursor: pointer;
-            border: 1px solid #222222;
+            border: none;
             transition: all 0.2s ease;
-            margin: 0 auto;
         }
 
         .teneo-manage-popup-load-more-row:hover {
-            background: #0a0a0b;
-            border-color: #333333;
+            background: #2d3135;
         }
 
         /* Load More Frame Inner */
@@ -936,9 +929,9 @@
             flex-direction: row;
             align-items: center;
             padding: 0px;
-            gap: 0px;
-            width: auto;
-            height: auto;
+            gap: 14.22px;
+            width: 86px;
+            height: 19px;
             flex: none;
             order: 0;
             flex-grow: 0;
@@ -946,8 +939,8 @@
 
         /* Load More Text */
         .teneo-manage-popup-load-more-text {
-            width: auto;
-            height: auto;
+            width: 86px;
+            height: 19px;
             font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 400;
@@ -957,8 +950,6 @@
             flex: none;
             order: 0;
             flex-grow: 0;
-            padding: 14.2161px;
-            white-space: nowrap;
         }
 
         /* Popup Backdrop */
