@@ -22,7 +22,7 @@
     // CSS styles matching exact Figma specifications
     const widgetCSS = `
         .teneo-widget-container {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'PPNeueMontreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: #ffffff;
             background: transparent;
             width: 100%;
@@ -75,7 +75,7 @@
         .teneo-widget-search-input {
             width: 100%;
             height: 26px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 20px;
@@ -103,7 +103,7 @@
             width: auto;
             min-width: 500px;
             height: 115px;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'PPNeueMontreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             font-weight: 300;
             font-style: normal;
             font-size: 64px;
@@ -253,7 +253,7 @@
             height: 100%;
             left: 0;
             top: 0;
-            font-family: 'Inter', sans-serif;
+            font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 500;
             font-size: 26px;
@@ -296,7 +296,7 @@
         .teneo-widget-name {
             width: 200px;
             height: 23.693517684936523px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 500;
             font-size: 20px;
@@ -333,7 +333,7 @@
         .teneo-widget-creator {
             width: 139.791748046875px;
             height: 18.95481300354004px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 14px;
@@ -390,7 +390,7 @@
         /* Online/Offline Text */
         .teneo-widget-status-label {
             height: 25px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 14px;
@@ -414,7 +414,7 @@
         .teneo-widget-description {
             width: 367.14px;
             height: 120px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 16px;
@@ -472,7 +472,7 @@
             height: 26px;
             left: 0px;
             top: 1.21px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 14.2161px;
@@ -542,7 +542,7 @@
             line-height: 19px;
             cursor: pointer;
             transition: all 0.2s ease;
-            font-family: 'Inter', sans-serif;
+            font-family: 'PPNeueMontreal', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -697,7 +697,7 @@
         .teneo-manage-popup-search-input {
             width: 135px;
             height: 16px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 20px;
@@ -777,7 +777,7 @@
         .teneo-manage-popup-filter-label {
             width: 42px;
             height: 16px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 20px;
@@ -807,7 +807,7 @@
         .teneo-manage-popup-title {
             width: 409px;
             height: 115px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 64px;
@@ -872,7 +872,7 @@
         .teneo-manage-popup-more-title {
             width: 345px;
             height: 115px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 64px;
@@ -946,7 +946,7 @@
         .teneo-manage-popup-load-more-text {
             width: 86px;
             height: 19px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 18.9548px;
@@ -1039,32 +1039,53 @@
         }
 
         async init() {
-            this.injectCSS();
+            await this.injectCSS();
             this.setupContainer();
             await this.loadConfiguration();
             await this.loadAgents();
             this.setupEventListeners();
         }
 
-        injectCSS() {
-            // Load Inter font from Google Fonts
-            if (!document.getElementById('teneo-widget-fonts')) {
-                const fontLink = document.createElement('link');
-                fontLink.id = 'teneo-widget-fonts';
-                fontLink.rel = 'preconnect';
-                fontLink.href = 'https://fonts.googleapis.com';
-                document.head.appendChild(fontLink);
-                
-                const fontLink2 = document.createElement('link');
-                fontLink2.rel = 'preconnect';
-                fontLink2.href = 'https://fonts.gstatic.com';
-                fontLink2.crossOrigin = 'anonymous';
-                document.head.appendChild(fontLink2);
-                
-                const fontLink3 = document.createElement('link');
-                fontLink3.rel = 'stylesheet';
-                fontLink3.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap';
-                document.head.appendChild(fontLink3);
+        async checkFontAvailable(fontFamily) {
+            // Check if font is available using Font Loading API
+            try {
+                if (document.fonts && document.fonts.check) {
+                    // Wait for fonts to be ready
+                    await document.fonts.ready;
+                    // Check if font is available
+                    const isAvailable = document.fonts.check(`16px "${fontFamily}"`);
+                    return isAvailable;
+                }
+            } catch (e) {
+                console.warn('Font check failed:', e);
+            }
+            
+            // Fallback: Try to detect font using canvas method
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const testString = 'mmmmmmmmmmlli';
+            const testSize = '72px';
+            
+            // Measure with fallback font
+            ctx.font = `${testSize} monospace`;
+            const baselineWidth = ctx.measureText(testString).width;
+            
+            // Measure with target font
+            ctx.font = `${testSize} "${fontFamily}", monospace`;
+            const testWidth = ctx.measureText(testString).width;
+            
+            return baselineWidth !== testWidth;
+        }
+
+        async injectCSS() {
+            // Check if PPNeueMontreal is available
+            const fontAvailable = await this.checkFontAvailable('PPNeueMontreal');
+            
+            if (!fontAvailable) {
+                console.warn('PPNeueMontreal font is not available. Using fallback fonts.');
+                console.log('To load PPNeueMontreal, add @font-face rules in the injectCSS() method.');
+            } else {
+                console.log('PPNeueMontreal font is available ✓');
             }
             
             if (!document.getElementById('teneo-widget-styles')) {
