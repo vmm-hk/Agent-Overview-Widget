@@ -24,7 +24,7 @@
         .teneo-widget-container {
             font-family: 'PPNeueMontreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: #ffffff;
-            background: transparent;
+            background: #09090a;
             width: 100%;
             max-width: 1400px;
             margin: 0 auto;
@@ -1407,9 +1407,14 @@
                 this.imageLoadStatus.set(agent.id, true);
                 
             } catch (error) {
+                // Silently fail - show initials instead of image
                 imgElement.style.display = 'none';
                 initialsElement.style.display = 'flex';
                 this.imageLoadStatus.set(agent.id, false);
+                // Only log if it's not a validation error (to avoid console spam)
+                if (!error.message.includes('Invalid') && !error.message.includes('Timeout')) {
+                    console.debug('Failed to load image for agent:', agent.agent_name, error.message);
+                }
             }
         }
 
@@ -1608,6 +1613,14 @@
         convertIpfsUrl(ipfsUrl) {
             if (!ipfsUrl) return null;
             
+            // Validate URL - must start with http://, https://, or ipfs://
+            if (!ipfsUrl.startsWith('http://') && 
+                !ipfsUrl.startsWith('https://') && 
+                !ipfsUrl.startsWith('ipfs://')) {
+                console.warn('Invalid image URL format:', ipfsUrl);
+                return null;
+            }
+            
             if (ipfsUrl.startsWith('ipfs://')) {
                 // Extract only the hash part (before the first slash after ipfs://)
                 // Example: ipfs://bafybeifygoi4xhcrm4q5km2efi6h7qbryb2e2gtvxga2vtp6kynuycx2mq/agent_image_1762487034.png
@@ -1615,6 +1628,11 @@
                 // Convert to: https://ipfs.io/ipfs/bafybeifygoi4xhcrm4q5km2efi6h7qbryb2e2gtvxga2vtp6kynuycx2mq
                 const pathAfterIpfs = ipfsUrl.replace('ipfs://', '');
                 const hash = pathAfterIpfs.split('/')[0]; // Get only the hash, ignore filename/path
+                
+                if (!hash || hash.length === 0) {
+                    console.warn('Invalid IPFS hash:', ipfsUrl);
+                    return null;
+                }
                 
                 return {
                     gateways: [
@@ -1630,11 +1648,25 @@
         }
 
         async loadImageWithFallback(imageInfo, imgElement) {
+            if (!imageInfo || !imgElement) {
+                throw new Error('Invalid image info or element');
+            }
+            
             if (!imageInfo.isIpfs) {
+                // Validate URL format before attempting to load
+                if (!imageInfo.url || 
+                    (!imageInfo.url.startsWith('http://') && !imageInfo.url.startsWith('https://'))) {
+                    throw new Error('Invalid URL format');
+                }
+                
                 // For non-IPFS URLs, verify the image loads before setting it
                 return new Promise((resolve, reject) => {
                     const testImg = new Image();
-                    const timeout = setTimeout(() => reject(new Error('Timeout')), 5000);
+                    const timeout = setTimeout(() => {
+                        testImg.onerror = null;
+                        testImg.onload = null;
+                        reject(new Error('Timeout'));
+                    }, 5000);
                     
                     testImg.onload = () => {
                         clearTimeout(timeout);
