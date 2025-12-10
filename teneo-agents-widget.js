@@ -271,9 +271,9 @@
             flex-direction: column;
             align-items: flex-start;
             padding: 0px;
-            gap: 2.37px;
+            gap: 0px;
             width: 200px;
-            height: 45.02px;
+            height: auto;
             flex: none;
             flex-grow: 0;
         }
@@ -285,9 +285,9 @@
             justify-content: center;
             align-items: flex-start;
             padding: 0px;
+            margin: 0px;
             width: 200px;
-            height: auto;
-            min-height: 23.69px;
+            height: 23.693517684936523px;
             flex: none;
             flex-grow: 0;
         }
@@ -295,7 +295,7 @@
         /* Agent X */
         .teneo-widget-name {
             width: 200px;
-            min-height: 23.69px;
+            height: 23.693517684936523px;
             font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 500;
@@ -306,8 +306,11 @@
             color: #BAD3D8;
             flex: none;
             flex-grow: 0;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0px;
+            margin: 0px;
         }
 
         /* Creator Container - Frame 1261156184 */
@@ -317,9 +320,10 @@
             justify-content: center;
             align-items: flex-start;
             padding: 0px;
-            width: 200px;
-            height: auto;
-            min-height: 18.95px;
+            margin: 0px;
+            margin-top: 0px;
+            width: 139.791748046875px;
+            height: 18.95481300354004px;
             flex: none;
             align-self: stretch;
             flex-grow: 0;
@@ -327,9 +331,8 @@
 
         /* frolody-007-ai */
         .teneo-widget-creator {
-            width: 200px;
-            height: auto;
-            min-height: 25px;
+            width: 139.791748046875px;
+            height: 18.95481300354004px;
             font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 400;
@@ -343,6 +346,8 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            padding: 0px;
+            margin: 0px;
         }
 
         /* Status Container - Frame 1261156309 */
@@ -513,25 +518,23 @@
 
         .teneo-widget-load-more {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             justify-content: center;
             align-items: center;
-            padding: 64px 201px;
-            gap: 82px;
-            width: 100%;
-            max-width: 1728px;
+            padding: 0px;
+            gap: 15.4px;
+            width: 385.0196533203125px;
+            height: 59.23379135131836px;
             margin: 0 auto;
             margin-top: 2rem;
             opacity: 1;
-            border: 1px solid transparent;
             box-sizing: border-box;
-            text-align: center;
         }
 
         .teneo-widget-load-more-btn {
-            padding: 14.2161px 20px;
+            padding: 0px;
             background: #25272B;
-            border: 1px solid #222222;
+            border: none;
             border-radius: 0px;
             color: #FAFCFC;
             font-weight: 400;
@@ -540,11 +543,13 @@
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: 'Inter', sans-serif;
-            display: inline-flex;
+            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 59px;
-            margin: 0 auto;
+            width: 385.0196533203125px;
+            height: 59.23379135131836px;
+            gap: 9.48px;
         }
 
         .teneo-widget-load-more-btn:hover {
@@ -910,7 +915,7 @@
             width: 137.42px;
             height: 59.23px;
             background: #25272B;
-            border-radius: 5.92338px;
+            border-radius: 0px;
             flex: none;
             order: 0;
             flex-grow: 0;
