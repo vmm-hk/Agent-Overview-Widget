@@ -317,8 +317,9 @@
             justify-content: center;
             align-items: flex-start;
             padding: 0px;
-            width: 139.79px;
-            height: 18.95px;
+            width: 200px;
+            height: auto;
+            min-height: 18.95px;
             flex: none;
             align-self: stretch;
             flex-grow: 0;
@@ -326,8 +327,9 @@
 
         /* frolody-007-ai */
         .teneo-widget-creator {
-            width: 83px;
-            height: 25px;
+            width: 200px;
+            height: auto;
+            min-height: 25px;
             font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 400;
@@ -338,6 +340,9 @@
             color: #BAD3D8;
             flex: none;
             flex-grow: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* Status Container - Frame 1261156309 */
@@ -1587,7 +1592,13 @@
             if (!ipfsUrl) return null;
             
             if (ipfsUrl.startsWith('ipfs://')) {
-                const hash = ipfsUrl.replace('ipfs://', '');
+                // Extract only the hash part (before the first slash after ipfs://)
+                // Example: ipfs://bafybeifygoi4xhcrm4q5km2efi6h7qbryb2e2gtvxga2vtp6kynuycx2mq/agent_image_1762487034.png
+                // Hash: bafybeifygoi4xhcrm4q5km2efi6h7qbryb2e2gtvxga2vtp6kynuycx2mq
+                // Convert to: https://ipfs.io/ipfs/bafybeifygoi4xhcrm4q5km2efi6h7qbryb2e2gtvxga2vtp6kynuycx2mq
+                const pathAfterIpfs = ipfsUrl.replace('ipfs://', '');
+                const hash = pathAfterIpfs.split('/')[0]; // Get only the hash, ignore filename/path
+                
                 return {
                     gateways: [
                         `https://gateway.pinata.cloud/ipfs/${hash}`,
