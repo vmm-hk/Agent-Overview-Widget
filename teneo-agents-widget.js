@@ -66,28 +66,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .teneo-widget-search-icon::before {
-            content: '';
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            border: 1.5px solid #9EB5BC;
-            border-radius: 50%;
-            top: 1px;
-            left: 1px;
-        }
-
-        .teneo-widget-search-icon::after {
-            content: '';
-            position: absolute;
-            width: 5px;
-            height: 1.5px;
-            background: #9EB5BC;
-            transform: rotate(45deg);
-            bottom: 2px;
-            right: 1px;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18.75 18.75L14.4 14.4M8.75 3.75C11.5114 3.75 13.75 5.98858 13.75 8.75M16.75 8.75C16.75 13.1683 13.1683 16.75 8.75 16.75C4.33172 16.75 0.75 13.1683 0.75 8.75C0.75 4.33172 4.33172 0.75 8.75 0.75C13.1683 0.75 16.75 4.33172 16.75 8.75Z' stroke='%239EB5BC' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
         }
 
         .teneo-widget-search-input {
@@ -224,7 +206,7 @@
             align-items: center;
             padding: 0px;
             gap: 10.66px;
-            width: 200.21px;
+            width: 260.42px;
             height: 50.04px;
             flex: none;
             flex-grow: 0;
@@ -290,7 +272,7 @@
             align-items: flex-start;
             padding: 0px;
             gap: 2.37px;
-            width: 139.79px;
+            width: 200px;
             height: 45.02px;
             flex: none;
             flex-grow: 0;
@@ -303,16 +285,17 @@
             justify-content: center;
             align-items: flex-start;
             padding: 0px;
-            width: 117.28px;
-            height: 23.69px;
+            width: 200px;
+            height: auto;
+            min-height: 23.69px;
             flex: none;
             flex-grow: 0;
         }
 
         /* Agent X */
         .teneo-widget-name {
-            width: 117.28px;
-            height: 23.69px;
+            width: 200px;
+            min-height: 23.69px;
             font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 500;
@@ -323,9 +306,8 @@
             color: #BAD3D8;
             flex: none;
             flex-grow: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         /* Creator Container - Frame 1261156184 */
@@ -525,25 +507,44 @@
         }
 
         .teneo-widget-load-more {
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 64px 201px;
+            gap: 82px;
+            width: 100%;
+            max-width: 1728px;
+            margin: 0 auto;
             margin-top: 2rem;
+            opacity: 1;
+            border: 1px solid transparent;
+            box-sizing: border-box;
+            text-align: center;
         }
 
         .teneo-widget-load-more-btn {
-            padding: 0.75rem 2rem;
-            background: #374151;
-            border: 1px solid #4b5563;
-            border-radius: 8px;
-            color: #d1d5db;
-            font-weight: 500;
-            font-size: 0.875rem;
+            padding: 14.2161px 20px;
+            background: #050506;
+            border: 1px solid #222222;
+            border-radius: 0px;
+            color: #FAFCFC;
+            font-weight: 400;
+            font-size: 18.9548px;
+            line-height: 19px;
             cursor: pointer;
             transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 59px;
+            margin: 0 auto;
         }
 
         .teneo-widget-load-more-btn:hover {
-            background: #4b5563;
-            border-color: #6b7280;
+            background: #0a0a0b;
+            border-color: #333333;
         }
 
         /* Responsive */
@@ -674,10 +675,13 @@
         .teneo-manage-popup-search-icon {
             width: 18px;
             height: 18px;
-            border: 1.5px solid #9EB5BC;
             flex: none;
             order: 0;
             flex-grow: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18.75 18.75L14.4 14.4M8.75 3.75C11.5114 3.75 13.75 5.98858 13.75 8.75M16.75 8.75C16.75 13.1683 13.1683 16.75 8.75 16.75C4.33172 16.75 0.75 13.1683 0.75 8.75C0.75 4.33172 4.33172 0.75 8.75 0.75C13.1683 0.75 16.75 4.33172 16.75 8.75Z' stroke='%239EB5BC' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
         }
 
         /* Search Input */
@@ -874,18 +878,25 @@
         /* Load More Frame */
         .teneo-manage-popup-load-more-frame {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 0px;
-            gap: 15.4px;
-            width: 385.02px;
-            height: 59.23px;
-            background: #25272B;
+            padding: 64px 201px;
+            gap: 82px;
+            width: 1728px;
+            max-width: 100%;
+            height: auto;
+            min-height: auto;
+            background: transparent;
             flex: none;
             order: 5;
             flex-grow: 0;
             z-index: 5;
+            opacity: 1;
+            border: 1px solid transparent;
+            box-sizing: border-box;
+            margin: 0 auto;
+            text-align: center;
         }
 
         /* Load More Row */
@@ -894,17 +905,24 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 14.2161px;
-            gap: 9.48px;
-            width: 137.42px;
-            height: 59.23px;
-            background: #25272B;
-            border-radius: 5.92338px;
+            padding: 14.2161px 20px;
+            gap: 0px;
+            width: auto;
+            height: auto;
+            background: #050506;
+            border-radius: 0px;
             flex: none;
             order: 0;
             flex-grow: 0;
             cursor: pointer;
-            border: none;
+            border: 1px solid #222222;
+            transition: all 0.2s ease;
+            margin: 0 auto;
+        }
+
+        .teneo-manage-popup-load-more-row:hover {
+            background: #0a0a0b;
+            border-color: #333333;
         }
 
         /* Load More Frame Inner */
@@ -913,9 +931,9 @@
             flex-direction: row;
             align-items: center;
             padding: 0px;
-            gap: 14.22px;
-            width: 86px;
-            height: 19px;
+            gap: 0px;
+            width: auto;
+            height: auto;
             flex: none;
             order: 0;
             flex-grow: 0;
@@ -923,8 +941,8 @@
 
         /* Load More Text */
         .teneo-manage-popup-load-more-text {
-            width: 86px;
-            height: 19px;
+            width: auto;
+            height: auto;
             font-family: 'Inter', sans-serif;
             font-style: normal;
             font-weight: 400;
@@ -934,6 +952,8 @@
             flex: none;
             order: 0;
             flex-grow: 0;
+            padding: 14.2161px;
+            white-space: nowrap;
         }
 
         /* Popup Backdrop */
@@ -1321,7 +1341,7 @@
                                             <div class="teneo-widget-name">${agent.agent_name || 'Unnamed Agent'}</div>
                                         </div>
                                         <div class="teneo-widget-creator-container">
-                                            <div class="teneo-widget-creator">${agent.creator_name || this.formatAddress(agent.creator)}</div>
+                                            <div class="teneo-widget-creator">${agent.agent_id || 'Unknown'}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -1335,7 +1355,7 @@
                             </div>
                         </div>
                         <div class="teneo-widget-actions">
-                            <a href="https://chatroom.teneo-protocol.ai" target="_blank" class="teneo-widget-btn">
+                            <a href="https://developer.chatroom.teneo-protocol.ai/chatroom" target="_blank" class="teneo-widget-btn">
                                 <div class="btn-text">Chat Now</div>
                             </a>
                         </div>
