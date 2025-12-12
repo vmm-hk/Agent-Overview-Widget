@@ -104,10 +104,10 @@
             min-width: 500px;
             height: 115px;
             font-family: 'PPNeueMontreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            font-weight: 300;
+            font-weight: 400;
             font-style: normal;
-            font-size: 64px;
-            line-height: 180%;
+            font-size: 3rem;
+            line-height: 1.2;
             letter-spacing: 0;
             text-align: center;
             color: #FFFFFF;
@@ -580,7 +580,8 @@
                 width: 100%;
                 min-width: auto;
                 max-width: 100%;
-                font-size: 48px;
+                font-size: 2.5rem;
+                line-height: 1.2;
                 padding: 0 20px;
                 box-sizing: border-box;
             }
@@ -605,7 +606,8 @@
             }
             
             .teneo-widget-section-title {
-                font-size: 40px;
+                font-size: 2rem;
+                line-height: 1.2;
                 padding: 0 15px;
             }
         }
@@ -810,8 +812,8 @@
             font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 400;
-            font-size: 64px;
-            line-height: 180%;
+            font-size: 3rem;
+            line-height: 1.2;
             text-align: center;
             color: #FFFFFF;
             flex: none;
@@ -875,8 +877,8 @@
             font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 400;
-            font-size: 64px;
-            line-height: 180%;
+            font-size: 3rem;
+            line-height: 1.2;
             text-align: center;
             color: #FFFFFF;
             flex: none;
@@ -1015,11 +1017,13 @@
             }
             
             .teneo-manage-popup-title {
-                font-size: 48px;
+                font-size: 2.5rem;
+                line-height: 1.2;
             }
             
             .teneo-manage-popup-more-title {
-                font-size: 48px;
+                font-size: 2.5rem;
+                line-height: 1.2;
             }
         }
     `;
