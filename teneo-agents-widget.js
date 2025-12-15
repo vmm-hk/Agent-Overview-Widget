@@ -15,7 +15,7 @@
             'x-agent-enterprise-v2',
             'tiktok',
             'amazon',
-            'uniswap-agent'
+            'gas-sniper-agent'
         ]
     };
 
