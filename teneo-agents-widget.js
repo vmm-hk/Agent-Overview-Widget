@@ -32,7 +32,95 @@
             overflow-x: auto;
         }
 
-        /* Search Bar */
+        /* Category Filter Row (Frame) */
+        .teneo-widget-category-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 12px;
+            width: 100%;
+            max-width: 1326px; /* allow more width so categories stay within two rows on large screens */
+            min-height: 92px; /* single-row spec, but allow wrapping */
+            margin: 0 auto 24px auto; /* center whole row and add space above search */
+            box-sizing: border-box;
+        }
+
+        /* "All Categories" dropdown */
+        .teneo-widget-category-dropdown {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 12px;
+            min-width: 107px;
+            height: 16px;
+            padding: 0;
+            background: transparent;
+            border: none;
+            color: #E5E7EB;
+            font-family: 'PPNeueMontreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
+            line-height: 16px;
+            cursor: pointer;
+        }
+
+        .teneo-widget-category-dropdown-icon {
+            width: 10px;
+            height: 6px;
+            background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23E5E7EB' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .teneo-widget-category-dropdown-label {
+            white-space: nowrap;
+        }
+
+        .teneo-widget-category-dropdown.active {
+            color: #FFFFFF;
+        }
+
+        .teneo-widget-category-pill-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center; /* center pills so rows form a pyramid */
+            gap: 10px;
+            flex: 1;
+        }
+
+        /* Single Category Box - matches Load More button styling */
+        .teneo-widget-category-pill {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-width: 74px;
+            height: 40px;
+            padding: 0 12px;
+            border-radius: 0px;
+            border: none;
+            background: #25272B;
+            color: #FAFCFC;
+            font-family: 'PPNeueMontreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
+            line-height: 1.4;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .teneo-widget-category-pill:hover {
+            background: #2d3135; /* same hover as load more */
+        }
+
+        .teneo-widget-category-pill.active {
+            background: #D3F372;
+            color: #000000;
+        }
+
         .teneo-widget-search-row {
             display: flex;
             flex-direction: column;
@@ -576,6 +664,23 @@
                 padding: 0 20px;
             }
             
+            .teneo-widget-category-row {
+                max-width: 100%;
+                flex-direction: column;
+                align-items: flex-start;
+                min-height: auto;
+                gap: 12px;
+            }
+
+            .teneo-widget-category-pill-container {
+                justify-content: flex-start;
+                width: 100%;
+            }
+
+            .teneo-widget-category-pill {
+                min-width: auto;
+            }
+
             .teneo-widget-section-title {
                 width: 100%;
                 min-width: auto;
@@ -1038,6 +1143,8 @@
             this.imageLoadStatus = new Map();
             this.moreAgentsCount = 6; // Start with 6 agents in "More Agents" section
             this.showingMoreManage = false;
+            this.categories = [];
+            this.activeCategory = null;
             
             this.init();
         }
@@ -1113,6 +1220,14 @@
                     </div>
                     
                     <div id="teneo-content" style="display: none;">
+                        <!-- Category Filters -->
+                        <div class="teneo-widget-category-row" id="teneo-category-row" style="display: none;">
+                            <button class="teneo-widget-category-dropdown" id="teneo-category-all" type="button">
+                                <span class="teneo-widget-category-dropdown-icon"></span>
+                                <span class="teneo-widget-category-dropdown-label">All Categories</span>
+                            </button>
+                            <div class="teneo-widget-category-pill-container" id="teneo-category-pills"></div>
+                        </div>
                         <!-- Search Bar -->
                         <div class="teneo-widget-search-row">
                             <div class="teneo-widget-search-frame">
@@ -1233,10 +1348,26 @@
                 }
 
                 const data = await response.json();
-                this.agents = data.agents || [];
+                this.agents = (data.agents || []).map(agent => {
+                    let parsedCategories = [];
+                    if (agent.categories) {
+                        try {
+                            const raw = typeof agent.categories === 'string' ? JSON.parse(agent.categories) : agent.categories;
+                            if (Array.isArray(raw)) {
+                                parsedCategories = raw;
+                            }
+                        } catch (e) {
+                            console.warn('Failed to parse agent categories', agent.categories, e);
+                        }
+                    }
+                    agent._categories = parsedCategories;
+                    return agent;
+                });
                 
+                this.buildCategoryList();
                 this.processAgents();
                 this.renderAgents();
+                this.renderCategoryFilters();
                 this.hideLoading();
                 
             } catch (error) {
@@ -1319,7 +1450,19 @@
             const moreAgents = remainingAgents.slice(0, this.moreAgentsCount);
             this.renderAgentGrid('more-grid', moreAgents);
             
+            const popularSection = document.getElementById('popular-section');
+            const moreSection = document.getElementById('more-section');
             const loadMoreBtn = document.getElementById('load-more');
+
+            // Show/hide sections based on whether they actually have agents
+            if (popularSection) {
+                popularSection.style.display = popularAgents.length > 0 ? 'flex' : 'none';
+            }
+
+            if (moreSection) {
+                moreSection.style.display = moreAgents.length > 0 ? 'flex' : 'none';
+            }
+
             if (loadMoreBtn) {
                 const hasMoreAgents = remainingAgents.length > this.moreAgentsCount;
                 loadMoreBtn.style.display = hasMoreAgents ? 'block' : 'none';
@@ -1422,6 +1565,66 @@
             }
         }
 
+        buildCategoryList() {
+            const set = new Set();
+            this.agents.forEach(agent => {
+                (agent._categories || []).forEach(cat => {
+                    if (cat && typeof cat === 'string') {
+                        set.add(cat);
+                    }
+                });
+            });
+            this.categories = Array.from(set).sort((a, b) => a.localeCompare(b));
+        }
+
+        renderCategoryFilters() {
+            const row = document.getElementById('teneo-category-row');
+            const container = document.getElementById('teneo-category-pills');
+            if (!row || !container) return;
+
+            if (!this.categories || this.categories.length === 0) {
+                row.style.display = 'none';
+                return;
+            }
+
+            row.style.display = 'flex';
+            container.innerHTML = this.categories.map(cat => `
+                <button class="teneo-widget-category-pill" data-category="${cat}">
+                    ${cat}
+                </button>
+            `).join('');
+
+            this.updateCategoryActivePills();
+        }
+
+        updateCategoryActivePills() {
+            const row = document.getElementById('teneo-category-row');
+            if (!row) return;
+
+            const activeCategory = this.activeCategory;
+
+            // Highlight dropdown when no category selected
+            const dropdown = row.querySelector('.teneo-widget-category-dropdown');
+            if (dropdown) {
+                if (!activeCategory) {
+                    dropdown.classList.add('active');
+                } else {
+                    dropdown.classList.remove('active');
+                }
+            }
+
+            // Highlight pills when a category is selected
+            const pills = row.querySelectorAll('.teneo-widget-category-pill');
+            pills.forEach(pill => {
+                const category = pill.getAttribute('data-category');
+                if (activeCategory && category === activeCategory) {
+                    pill.classList.add('active');
+                } else {
+                    pill.classList.remove('active');
+                }
+            });
+        }
+
         setupEventListeners() {
             // Search input in main widget
             const widgetSearch = document.getElementById('teneo-widget-search');
@@ -1446,6 +1649,29 @@
             if (filterBtn) {
                 filterBtn.addEventListener('click', () => {
                     // Filter functionality can be added here
+                });
+            }
+            
+            // Category filter interactions
+            const categoryRow = document.getElementById('teneo-category-row');
+            if (categoryRow) {
+                const allButton = document.getElementById('teneo-category-all');
+                if (allButton) {
+                    allButton.addEventListener('click', () => {
+                        this.activeCategory = null;
+                        this.updateCategoryActivePills();
+                        this.filterAgents();
+                    });
+                }
+
+                categoryRow.addEventListener('click', (e) => {
+                    const pill = e.target.closest('.teneo-widget-category-pill');
+                    if (!pill) return;
+
+                    const category = pill.getAttribute('data-category');
+                    this.activeCategory = category || null;
+                    this.updateCategoryActivePills();
+                    this.filterAgents();
                 });
             }
             
@@ -1523,12 +1749,15 @@
             const popularSection = document.getElementById('popular-section');
             const moreSection = document.getElementById('more-section');
             const searchResultsSection = document.getElementById('search-results-section');
+            const activeCategory = this.activeCategory;
             
             if (!searchTerm) {
-                // No search term - show normal sections
-                this.filteredAgents = [...this.agents];
-                if (popularSection) popularSection.style.display = 'flex';
-                if (moreSection) moreSection.style.display = 'flex';
+                // No search term - category-only filtering, keep Popular/More layout
+                let baseAgents = this.agents;
+                if (activeCategory) {
+                    baseAgents = baseAgents.filter(agent => (agent._categories || []).includes(activeCategory));
+                }
+                this.filteredAgents = [...baseAgents];
                 if (searchResultsSection) searchResultsSection.style.display = 'none';
                 this.processAgents();
                 this.renderAgents();
@@ -1538,10 +1767,14 @@
                     const agentName = (agent.agent_name || '').toLowerCase();
                     const creatorName = (agent.creator_name || '').toLowerCase();
                     const description = (agent.description || '').toLowerCase();
-                    
-                    return agentName.includes(searchTerm) ||
-                           creatorName.includes(searchTerm) ||
-                           description.includes(searchTerm);
+                    const inCategory = !activeCategory || (agent._categories || []).includes(activeCategory);
+
+                    const matchesSearch =
+                        agentName.includes(searchTerm) ||
+                        creatorName.includes(searchTerm) ||
+                        description.includes(searchTerm);
+
+                    return inCategory && matchesSearch;
                 });
                 
                 if (popularSection) popularSection.style.display = 'none';
