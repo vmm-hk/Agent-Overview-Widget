@@ -498,6 +498,41 @@
             width: 38px;
         }
 
+        /* Card Category Boxes - per Figma specs */
+        .teneo-widget-card-categories {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 6px;
+            width: 341px;
+            height: 40px;
+            max-width: 100%;
+            flex: none;
+            flex-grow: 0;
+            overflow: hidden;
+        }
+
+        .teneo-widget-card-category-pill {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            height: 40px;
+            padding: 0 12px;
+            border-radius: 0px;
+            border: 1px solid #D3F372;
+            background: transparent;
+            color: #D3F372;
+            font-family: 'PPNeueMontreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 16px;
+            letter-spacing: 0%;
+            white-space: nowrap;
+            flex: none;
+            flex-grow: 0;
+        }
+
         /* Description */
         .teneo-widget-description {
             width: 367.14px;
@@ -1485,10 +1520,50 @@
             }, 100);
         }
 
+        getAgentLink(agent) {
+            if (!agent) {
+                return 'https://developer.chatroom.teneo-protocol.ai/chatroom';
+            }
+
+            const agentId = (agent.agent_id || '').toLowerCase();
+            const agentName = (agent.agent_name || '').toLowerCase();
+            const description = (agent.description || '').toLowerCase();
+
+            // Instagram agent
+            if (
+                agentId === 'instagram' ||
+                agentId === 'instagram-agent' ||
+                agentName === 'instagram' ||
+                description.includes('extract data from instagram')
+            ) {
+                return 'https://teneo-pro.webflow.io/instagram-agent';
+            }
+
+            // LinkedIn agent
+            if (
+                agentId === 'linkedin-agent' ||
+                agentName.includes('linkedin')
+            ) {
+                return 'https://teneo-pro.webflow.io/linkedin-agent';
+            }
+
+            // X follower/followings agent
+            if (
+                agentId === 'x-follower-followings-agent' ||
+                agentName.toLowerCase().includes('follower') && agentName.toLowerCase().includes('x ')
+            ) {
+                return 'https://teneo-pro.webflow.io/x-follower-followings-agent';
+            }
+
+            // Default chatroom link
+            return 'https://developer.chatroom.teneo-protocol.ai/chatroom';
+        }
+
         createAgentCard(agent) {
             const isOnline = agent.is_online;
             const imageInfo = this.convertIpfsUrl(agent.image_url);
             const cardId = `teneo-card-${agent.id}`;
+            const targetUrl = this.getAgentLink(agent);
             
             return `
                 <div class="teneo-widget-card ${isOnline ? 'online' : 'offline'}" id="${cardId}">
@@ -1519,12 +1594,17 @@
                                     <div class="teneo-widget-status-label">${isOnline ? 'Online' : 'Offline'}</div>
                                 </div>
                             </div>
+                            ${agent._categories && agent._categories.length > 0 ? `
+                            <div class="teneo-widget-card-categories">
+                                ${agent._categories.map(cat => `<span class="teneo-widget-card-category-pill">${cat}</span>`).join('')}
+                            </div>
+                            ` : ''}
                             <div class="teneo-widget-description">
                                 <p>${agent.description || 'No description available'}</p>
                             </div>
                         </div>
                         <div class="teneo-widget-actions">
-                            <a href="https://developer.chatroom.teneo-protocol.ai/chatroom" target="_blank" class="teneo-widget-btn">
+                            <a href="${targetUrl}" target="_blank" class="teneo-widget-btn">
                                 <div class="btn-text">Chat Now</div>
                             </a>
                         </div>
