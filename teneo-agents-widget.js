@@ -230,7 +230,7 @@
             padding: 28.4322px;
             gap: 11.85px;
             width: 424px;
-            height: 293.25px;
+            height: 351.02px;
             background: #25272B;
             flex: none;
             flex-grow: 0;
@@ -253,10 +253,9 @@
             padding: 0px;
             gap: 20.14px;
             width: 367.14px;
-            height: 236.38px;
-            flex: none;
+            flex: 1;
             align-self: stretch;
-            flex-grow: 0;
+            min-height: 0;
         }
 
         /* Top Section - Frame 1261156188 */
@@ -267,10 +266,9 @@
             padding: 0px;
             gap: 17.77px;
             width: 367.14px;
-            height: 187.81px;
-            flex: none;
+            flex: 1;
             align-self: stretch;
-            flex-grow: 0;
+            min-height: 0;
         }
 
         /* Header Row - Frame 1261156308 */
@@ -520,8 +518,8 @@
             height: 40px;
             padding: 0 12px;
             border-radius: 0px;
-            border: 1px solid #D3F372;
-            background: transparent;
+            border: none;
+            background: #000000;
             color: #D3F372;
             font-family: 'PPNeueMontreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             font-weight: 400;
@@ -536,7 +534,8 @@
         /* Description */
         .teneo-widget-description {
             width: 367.14px;
-            height: 120px;
+            min-height: 0;
+            flex: 1;
             font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 400;
@@ -545,9 +544,8 @@
             display: flex;
             align-items: flex-start;
             color: #BAD3D8;
-            flex: none;
             align-self: stretch;
-            flex-grow: 0;
+            overflow: hidden;
         }
 
         .teneo-widget-description p {
@@ -557,6 +555,10 @@
             -webkit-line-clamp: 5;
             -webkit-box-orient: vertical;
             overflow: hidden;
+        }
+
+        .teneo-widget-card-has-categories .teneo-widget-description p {
+            -webkit-line-clamp: 4;
         }
 
         /* Button Container - Group 1000003594 */
@@ -1564,9 +1566,10 @@
             const imageInfo = this.convertIpfsUrl(agent.image_url);
             const cardId = `teneo-card-${agent.id}`;
             const targetUrl = this.getAgentLink(agent);
-            
+            const hasCategories = agent._categories && agent._categories.length > 0;
+
             return `
-                <div class="teneo-widget-card ${isOnline ? 'online' : 'offline'}" id="${cardId}">
+                <div class="teneo-widget-card ${isOnline ? 'online' : 'offline'} ${hasCategories ? 'teneo-widget-card-has-categories' : ''}" id="${cardId}">
                     <div class="teneo-widget-card-content">
                         <div class="teneo-widget-card-top">
                             <div class="teneo-widget-header-card">
