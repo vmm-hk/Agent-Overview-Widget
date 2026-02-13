@@ -10,12 +10,9 @@
         showPopularSection: true,
         adminApiUrl: null,
         popularAgentIds: [
+            'x-followers-followings-1',
             'instagram',
-            'google-maps',
-            'x-agent-enterprise-v2',
-            'tiktok',
-            'amazon',
-            'gas-sniper-agent'
+            'linkedin-agent'
         ]
     };
 
@@ -1834,6 +1831,12 @@
             const searchResultsSection = document.getElementById('search-results-section');
             const activeCategory = this.activeCategory;
             
+            // Update section title based on active category
+            const popularTitle = popularSection?.querySelector('.teneo-widget-section-title');
+            if (popularTitle) {
+                popularTitle.textContent = activeCategory ? activeCategory : 'Popular Agents';
+            }
+
             if (!searchTerm) {
                 // No search term - category-only filtering, keep Popular/More layout
                 let baseAgents = this.agents;
