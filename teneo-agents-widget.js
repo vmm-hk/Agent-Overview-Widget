@@ -1475,31 +1475,37 @@
         }
 
         renderAgents() {
-            const { popularAgents, remainingAgents } = this.getPopularAgents();
-            
-            // Render popular agents
-            this.renderAgentGrid('popular-grid', popularAgents);
-            
-            // Render more agents from remaining agents
-            const moreAgents = remainingAgents.slice(0, this.moreAgentsCount);
-            this.renderAgentGrid('more-grid', moreAgents);
-            
             const popularSection = document.getElementById('popular-section');
             const moreSection = document.getElementById('more-section');
             const loadMoreBtn = document.getElementById('load-more');
 
-            // Show/hide sections based on whether they actually have agents
-            if (popularSection) {
-                popularSection.style.display = popularAgents.length > 0 ? 'flex' : 'none';
-            }
+            if (this.activeCategory) {
+                // Category is active - show all filtered agents in the top section
+                this.renderAgentGrid('popular-grid', this.filteredAgents);
+                if (popularSection) {
+                    popularSection.style.display = this.filteredAgents.length > 0 ? 'flex' : 'none';
+                }
+                if (moreSection) moreSection.style.display = 'none';
+                if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+            } else {
+                // No category - use normal popular/more split
+                const { popularAgents, remainingAgents } = this.getPopularAgents();
 
-            if (moreSection) {
-                moreSection.style.display = moreAgents.length > 0 ? 'flex' : 'none';
-            }
+                this.renderAgentGrid('popular-grid', popularAgents);
 
-            if (loadMoreBtn) {
-                const hasMoreAgents = remainingAgents.length > this.moreAgentsCount;
-                loadMoreBtn.style.display = hasMoreAgents ? 'block' : 'none';
+                const moreAgents = remainingAgents.slice(0, this.moreAgentsCount);
+                this.renderAgentGrid('more-grid', moreAgents);
+
+                if (popularSection) {
+                    popularSection.style.display = popularAgents.length > 0 ? 'flex' : 'none';
+                }
+                if (moreSection) {
+                    moreSection.style.display = moreAgents.length > 0 ? 'flex' : 'none';
+                }
+                if (loadMoreBtn) {
+                    const hasMoreAgents = remainingAgents.length > this.moreAgentsCount;
+                    loadMoreBtn.style.display = hasMoreAgents ? 'block' : 'none';
+                }
             }
         }
 
