@@ -1527,7 +1527,7 @@
                 agentName === 'instagram' ||
                 description.includes('extract data from instagram')
             ) {
-                return { url: 'https://teneo-pro.webflow.io/instagram-agent', sameTab: true };
+                return { url: 'https://teneo.pro/instagram-agent', sameTab: true };
             }
 
             // LinkedIn agent
@@ -1535,7 +1535,7 @@
                 agentId === 'linkedin-agent' ||
                 agentName.includes('linkedin')
             ) {
-                return { url: 'https://teneo-pro.webflow.io/linkedin-agent', sameTab: true };
+                return { url: 'https://teneo.pro/linkedin-agent', sameTab: true };
             }
 
             // X follower/followings agent
@@ -1543,7 +1543,7 @@
                 agentId === 'x-follower-followings-agent' ||
                 agentName.toLowerCase().includes('follower') && agentName.toLowerCase().includes('x ')
             ) {
-                return { url: 'https://teneo-pro.webflow.io/x-follower-followings-agent', sameTab: true };
+                return { url: 'https://teneo.pro/x-follower-followings-agent', sameTab: true };
             }
 
             // Default chatroom link
