@@ -1527,7 +1527,7 @@
                 agentName === 'instagram' ||
                 description.includes('extract data from instagram')
             ) {
-                return 'https://teneo-pro.webflow.io/instagram-agent';
+                return { url: 'https://teneo-pro.webflow.io/instagram-agent', sameTab: true };
             }
 
             // LinkedIn agent
@@ -1535,7 +1535,7 @@
                 agentId === 'linkedin-agent' ||
                 agentName.includes('linkedin')
             ) {
-                return 'https://teneo-pro.webflow.io/linkedin-agent';
+                return { url: 'https://teneo-pro.webflow.io/linkedin-agent', sameTab: true };
             }
 
             // X follower/followings agent
@@ -1543,18 +1543,20 @@
                 agentId === 'x-follower-followings-agent' ||
                 agentName.toLowerCase().includes('follower') && agentName.toLowerCase().includes('x ')
             ) {
-                return 'https://teneo-pro.webflow.io/x-follower-followings-agent';
+                return { url: 'https://teneo-pro.webflow.io/x-follower-followings-agent', sameTab: true };
             }
 
             // Default chatroom link
-            return 'https://developer.chatroom.teneo-protocol.ai/chatroom';
+            return { url: 'https://developer.chatroom.teneo-protocol.ai/chatroom', sameTab: false };
         }
 
         createAgentCard(agent) {
             const isOnline = agent.is_online;
             const imageInfo = this.convertIpfsUrl(agent.image_url);
             const cardId = `teneo-card-${agent.id}`;
-            const targetUrl = this.getAgentLink(agent);
+            const linkInfo = this.getAgentLink(agent);
+            const targetUrl = linkInfo.url;
+            const targetAttr = linkInfo.sameTab ? '_self' : '_blank';
             const hasCategories = agent._categories && agent._categories.length > 0;
 
             return `
@@ -1579,10 +1581,12 @@
                                         <div class="teneo-widget-creator-container">
                                             <div class="teneo-widget-creator">${agent.agent_id || 'Unknown'}</div>
                                         </div>
+                                        ${ /* Status commented out for now
                                         <div class="teneo-widget-status-text ${isOnline ? 'online' : 'offline'}">
                                             <div class="teneo-widget-status-dot"></div>
                                             <div class="teneo-widget-status-label">${isOnline ? 'Online' : 'Offline'}</div>
                                         </div>
+                                        */ ''}
                                     </div>
                                 </div>
                             </div>
@@ -1596,7 +1600,7 @@
                             </div>
                         </div>
                         <div class="teneo-widget-actions">
-                            <a href="${targetUrl}" target="_blank" class="teneo-widget-btn">
+                            <a href="${targetUrl}" target="${targetAttr}" class="teneo-widget-btn">
                                 <div class="btn-text">Chat Now</div>
                             </a>
                         </div>
