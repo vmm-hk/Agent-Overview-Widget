@@ -186,7 +186,7 @@
 
         .teneo-widget-section-title {
             width: auto;
-            min-width: 500px;
+            max-width: 100%;
             height: 115px;
             font-family: 'PPNeueMontreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             font-weight: 400;
@@ -209,13 +209,15 @@
         /* Grid Container - Frame 1261156334 */
         .teneo-widget-grid {
             display: grid;
-            grid-template-columns: repeat(3, 424px);
+            grid-template-columns: repeat(3, 1fr);
             gap: 26px;
-            width: 1326px;
+            width: 100%;
+            max-width: 1326px;
             height: auto;
             justify-content: center;
             align-items: start;
             margin: 0 auto;
+            box-sizing: border-box;
         }
 
         /* Agent Card - Frame 1261156182 */
@@ -226,8 +228,8 @@
             align-items: center;
             padding: 28.4322px;
             gap: 11.85px;
-            width: 424px;
-            height: 351.02px;
+            width: 100%;
+            min-height: 351.02px;
             background: #25272B;
             flex: none;
             flex-grow: 0;
@@ -249,7 +251,7 @@
             align-items: flex-start;
             padding: 0px;
             gap: 20.14px;
-            width: 367.14px;
+            width: 100%;
             flex: 1;
             align-self: stretch;
             min-height: 0;
@@ -262,7 +264,7 @@
             align-items: flex-start;
             padding: 0px;
             gap: 17.77px;
-            width: 367.14px;
+            width: 100%;
             flex: 1;
             align-self: stretch;
             min-height: 0;
@@ -274,8 +276,8 @@
             flex-direction: row;
             align-items: center;
             padding: 0px;
-            gap: 58.05px;
-            width: 367.14px;
+            gap: 12px;
+            width: 100%;
             height: 50.04px;
             flex: none;
             align-self: stretch;
@@ -289,10 +291,9 @@
             align-items: center;
             padding: 0px;
             gap: 10.66px;
-            width: 260.42px;
+            flex: 1;
+            min-width: 0;
             height: 50.04px;
-            flex: none;
-            flex-grow: 0;
         }
 
         /* Avatar Circle - Group 1000003593 */
@@ -355,10 +356,9 @@
             align-items: flex-start;
             padding: 0px;
             gap: 0px;
-            width: 200px;
+            flex: 1;
+            min-width: 0;
             height: auto;
-            flex: none;
-            flex-grow: 0;
         }
 
         /* Agent Name Container - Frame 1261156183 */
@@ -369,7 +369,7 @@
             align-items: flex-start;
             padding: 0px;
             margin: 0px;
-            width: 200px;
+            width: 100%;
             height: 23.693517684936523px;
             flex: none;
             flex-grow: 0;
@@ -377,7 +377,7 @@
 
         /* Agent X */
         .teneo-widget-name {
-            width: 200px;
+            width: 100%;
             height: 23.693517684936523px;
             font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
@@ -405,7 +405,7 @@
             padding: 0px;
             margin: 0px;
             margin-top: 0px;
-            width: 139.791748046875px;
+            width: 100%;
             height: 18.95481300354004px;
             flex: none;
             align-self: stretch;
@@ -414,7 +414,7 @@
 
         /* frolody-007-ai */
         .teneo-widget-creator {
-            width: 139.791748046875px;
+            width: 100%;
             height: 18.95481300354004px;
             font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
@@ -446,11 +446,11 @@
         }
 
         .teneo-widget-status-text.online {
-            width: 62.69px;
+            width: auto;
         }
 
         .teneo-widget-status-text.offline {
-            width: 61.69px;
+            width: auto;
         }
 
         /* Ellipse 674 - Status Dot */
@@ -486,11 +486,11 @@
         }
 
         .teneo-widget-status-text.online .teneo-widget-status-label {
-            width: 39px;
+            width: auto;
         }
 
         .teneo-widget-status-text.offline .teneo-widget-status-label {
-            width: 38px;
+            width: auto;
         }
 
         /* Card Category Boxes - per Figma specs */
@@ -499,9 +499,8 @@
             flex-direction: row;
             align-items: center;
             gap: 6px;
-            width: 341px;
+            width: 100%;
             height: 40px;
-            max-width: 100%;
             flex: none;
             flex-grow: 0;
             overflow: hidden;
@@ -530,7 +529,7 @@
 
         /* Description */
         .teneo-widget-description {
-            width: 367.14px;
+            width: 100%;
             min-height: 0;
             flex: 1;
             font-family: 'PPNeueMontreal', sans-serif;
@@ -645,7 +644,8 @@
             align-items: center;
             padding: 0px;
             gap: 15.4px;
-            width: 385.0196533203125px;
+            width: 100%;
+            max-width: 385px;
             height: 59.23379135131836px;
             margin: 0 auto;
             margin-top: 2rem;
@@ -669,7 +669,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 385.0196533203125px;
+            width: 100%;
+            max-width: 385px;
             height: 59.23379135131836px;
             gap: 9.48px;
         }
@@ -681,15 +682,13 @@
         /* Responsive */
         @media (max-width: 1400px) {
             .teneo-widget-grid {
-                grid-template-columns: repeat(2, 424px);
-                width: 874px;
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 900px) {
             .teneo-widget-grid {
-                grid-template-columns: 424px;
-                width: 424px;
+                grid-template-columns: 1fr;
             }
         }
 
@@ -697,7 +696,7 @@
             .teneo-widget-container {
                 padding: 0 20px;
             }
-            
+
             .teneo-widget-category-row {
                 max-width: 100%;
                 flex-direction: column;
@@ -724,7 +723,7 @@
                 padding: 0 20px;
                 box-sizing: border-box;
             }
-            
+
             .teneo-widget-search-row {
                 margin-left: 0;
                 margin-right: 0;
@@ -735,15 +734,9 @@
         @media (max-width: 468px) {
             .teneo-widget-grid {
                 grid-template-columns: 1fr;
-                width: 100%;
-                padding: 0 20px;
+                padding: 0;
             }
-            
-            .teneo-widget-card {
-                width: 100%;
-                max-width: 424px;
-            }
-            
+
             .teneo-widget-section-title {
                 font-size: 2rem;
                 line-height: 1.2;
