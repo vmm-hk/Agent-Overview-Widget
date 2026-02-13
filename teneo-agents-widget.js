@@ -12,7 +12,10 @@
         popularAgentIds: [
             'x-followers-followings-1',
             'instagram',
-            'linkedin-agent'
+            'linkedin-agent',
+            'x-agent-enterprise-v2',
+            'messaribtceth',
+            'vc-attention'
         ]
     };
 
@@ -215,7 +218,7 @@
             max-width: 1326px;
             height: auto;
             justify-content: center;
-            align-items: start;
+            align-items: stretch;
             margin: 0 auto;
             box-sizing: border-box;
         }
@@ -224,12 +227,11 @@
         .teneo-widget-card {
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
             padding: 28.4322px;
             gap: 11.85px;
             width: 100%;
-            min-height: 351.02px;
             background: #25272B;
             flex: none;
             flex-grow: 0;
@@ -247,7 +249,7 @@
         .teneo-widget-card-content {
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: flex-start;
             padding: 0px;
             gap: 20.14px;
@@ -531,7 +533,7 @@
         .teneo-widget-description {
             width: 100%;
             min-height: 0;
-            flex: 1;
+            flex: none;
             font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 400;
