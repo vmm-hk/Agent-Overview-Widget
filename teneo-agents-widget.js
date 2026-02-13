@@ -276,11 +276,10 @@
         .teneo-widget-header-card {
             display: flex;
             flex-direction: row;
-            align-items: center;
+            align-items: flex-start;
             padding: 0px;
             gap: 12px;
             width: 100%;
-            height: 50.04px;
             flex: none;
             align-self: stretch;
             flex-grow: 0;
@@ -290,12 +289,11 @@
         .teneo-widget-avatar-section {
             display: flex;
             flex-direction: row;
-            align-items: center;
+            align-items: flex-start;
             padding: 0px;
             gap: 10.66px;
             flex: 1;
             min-width: 0;
-            height: 50.04px;
         }
 
         /* Avatar Circle - Group 1000003593 */
@@ -357,7 +355,7 @@
             flex-direction: column;
             align-items: flex-start;
             padding: 0px;
-            gap: 0px;
+            gap: 4px;
             flex: 1;
             min-width: 0;
             height: auto;
@@ -372,7 +370,6 @@
             padding: 0px;
             margin: 0px;
             width: 100%;
-            height: 23.693517684936523px;
             flex: none;
             flex-grow: 0;
         }
@@ -380,20 +377,14 @@
         /* Agent X */
         .teneo-widget-name {
             width: 100%;
-            height: 23.693517684936523px;
             font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 500;
             font-size: 20px;
-            line-height: 180%;
-            display: flex;
-            align-items: center;
+            line-height: 1.3;
             color: #BAD3D8;
             flex: none;
             flex-grow: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
             padding: 0px;
             margin: 0px;
         }
@@ -1588,11 +1579,11 @@
                                         <div class="teneo-widget-creator-container">
                                             <div class="teneo-widget-creator">${agent.agent_id || 'Unknown'}</div>
                                         </div>
+                                        <div class="teneo-widget-status-text ${isOnline ? 'online' : 'offline'}">
+                                            <div class="teneo-widget-status-dot"></div>
+                                            <div class="teneo-widget-status-label">${isOnline ? 'Online' : 'Offline'}</div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="teneo-widget-status-text ${isOnline ? 'online' : 'offline'}">
-                                    <div class="teneo-widget-status-dot"></div>
-                                    <div class="teneo-widget-status-label">${isOnline ? 'Online' : 'Offline'}</div>
                                 </div>
                             </div>
                             ${agent._categories && agent._categories.length > 0 ? `
