@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Widget Test - Exact Figma Design</title>
+    <title>Agent Detail - Teneo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -11,16 +11,16 @@
         body {
             margin: 0;
             padding: 20px;
-            background: #0a0a0a;
+            background: #09090a;
             min-height: 100vh;
         }
     </style>
 </head>
 <body>
-    <!-- Widget container -->
-    <div id="teneo-agents-widget"></div>
-    
-    <!-- Load the widget with exact Figma specifications -->
+    <!-- Agent detail container - widget auto-detects this ID -->
+    <div id="teneo-agent-detail"></div>
+
+    <!-- Same widget script, auto-detects detail mode from the container ID -->
     <script src="teneo-agents-widget.js?v=2"></script>
 </body>
 </html>

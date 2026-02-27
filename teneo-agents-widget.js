@@ -5,6 +5,7 @@
     const WIDGET_CONFIG = {
         apiUrl: 'https://backend.developer.chatroom.teneo-protocol.ai/api/public/agents',
         containerId: 'teneo-agents-widget',
+        detailContainerId: 'teneo-agent-detail',
         maxAgents: 12,
         showSearch: true,
         showPopularSection: true,
@@ -16,7 +17,14 @@
             'x-agent-enterprise-v2',
             'messaribtceth',
             'vc-attention'
-        ]
+        ],
+        detailPageUrl: './detail.html',
+        explorerUrls: {
+            peaq: 'https://peaq.subscan.io',
+            base: 'https://basescan.org',
+            avalanche: 'https://snowtrace.io',
+            bsc: 'https://bscscan.com'
+        }
     };
 
     // CSS styles matching exact Figma specifications
@@ -1153,6 +1161,577 @@
         }
     `;
 
+    // Explorer chain colors (from Figma)
+    const CHAIN_COLORS = {
+        peaq: '#6666fd',
+        base: '#0101fe',
+        avalanche: '#ea4242',
+        bsc: '#f0b90b'
+    };
+
+    // CSS for agent detail page (extracted from Figma via Pen.dev)
+    const detailCSS = `
+/* ===== TENEO DETAIL PAGE ===== */
+#teneo-agent-detail *,
+#teneo-agent-detail *::before,
+#teneo-agent-detail *::after {
+  box-sizing: border-box;
+}
+#teneo-agent-detail {
+  font-family: 'PPNeueMontreal', 'PP Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #BAD3D8;
+  background: #09090a;
+  -webkit-font-smoothing: antialiased;
+}
+
+.teneo-detail-content {
+  max-width: 1328px;
+  margin: 0 auto;
+  padding: 0 200px;
+}
+@media (max-width: 1440px) { .teneo-detail-content { padding: 0 80px; } }
+@media (max-width: 1024px) { .teneo-detail-content { padding: 0 40px; } }
+@media (max-width: 640px)  { .teneo-detail-content { padding: 0 20px; } }
+
+/* --- Back Link --- */
+.teneo-detail-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 64px 0 36px;
+  color: #FAFCFC;
+  text-decoration: none;
+  font-size: 20px;
+  line-height: 1.1;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.teneo-detail-back:hover { opacity: 0.7; }
+.teneo-detail-back svg { width: 24px; height: 24px; flex-shrink: 0; }
+
+/* --- Agent Header --- */
+.teneo-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 36px;
+  flex-wrap: wrap;
+}
+.teneo-detail-header-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.teneo-detail-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #D3F372;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 500;
+  color: #000000;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.teneo-detail-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.teneo-detail-name-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.teneo-detail-agent-name {
+  font-size: 36px;
+  font-weight: 500;
+  color: #FAFCFC;
+  line-height: 1.3;
+}
+.teneo-detail-agent-id {
+  font-size: 20px;
+  color: #FAFCFC;
+  line-height: 1.8;
+}
+
+.teneo-detail-header-right {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  flex-shrink: 0;
+}
+.teneo-detail-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.teneo-detail-status-label {
+  font-size: 24px;
+  color: #D3F372;
+  line-height: 1.5;
+}
+.teneo-detail-status-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #D3F372;
+  flex-shrink: 0;
+}
+.teneo-detail-status.offline .teneo-detail-status-label { color: #666; }
+.teneo-detail-status.offline .teneo-detail-status-dot { background: #666; }
+
+.teneo-detail-chat-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  background: #D3F372;
+  color: #000000;
+  font-family: inherit;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+.teneo-detail-chat-btn:hover { opacity: 0.85; }
+
+/* --- Category Pills --- */
+.teneo-detail-categories {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 36px;
+}
+.teneo-detail-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: #222222;
+  color: #D3F372;
+  font-size: 20px;
+  line-height: 0.8;
+  border-radius: 0;
+  white-space: nowrap;
+}
+
+/* --- Description --- */
+.teneo-detail-description {
+  padding-top: 36px;
+  font-size: 20px;
+  line-height: 1.5;
+  color: #FAFCFC;
+}
+.teneo-detail-description h2 {
+  font-size: 22px;
+  font-weight: 500;
+  color: #FAFCFC;
+  margin: 24px 0 12px;
+}
+.teneo-detail-description h2:first-child { margin-top: 0; }
+.teneo-detail-description h3 {
+  font-size: 18px;
+  font-weight: 500;
+  color: #FAFCFC;
+  margin: 24px 0 8px;
+}
+.teneo-detail-description p { margin-bottom: 16px; }
+.teneo-detail-description ul {
+  padding-left: 24px;
+  margin-bottom: 16px;
+}
+.teneo-detail-description li { margin-bottom: 6px; }
+.teneo-detail-description strong { color: #FAFCFC; }
+
+/* --- Divider --- */
+.teneo-detail-divider {
+  width: 100%;
+  height: 1px;
+  background: #222222;
+  margin-top: 64px;
+}
+
+/* --- Tabs Section --- */
+.teneo-detail-tabs-section {
+  border-left: 1px solid #222222;
+  border-right: 1px solid #222222;
+  max-width: 1328px;
+  margin: 0 auto;
+}
+.teneo-detail-tabs {
+  display: flex;
+  align-items: flex-end;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.teneo-detail-tabs::-webkit-scrollbar { display: none; }
+.teneo-detail-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 48px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.1;
+  color: #FAFCFC;
+  background: #050506;
+  border: none;
+  border-bottom: 1px solid #D3F372;
+  border-radius: 0;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.teneo-detail-tab:hover { background: #111; }
+.teneo-detail-tab.active {
+  background: #D3F372;
+  color: #050506;
+}
+
+/* --- Tab Content --- */
+.teneo-detail-tab-content { display: none; }
+.teneo-detail-tab-content.active { display: block; }
+
+/* --- Two-Column Layout --- */
+.teneo-detail-columns {
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+}
+.teneo-detail-col-left {
+  width: 441px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.teneo-detail-col-right {
+  flex: 1;
+  min-width: 0;
+}
+
+/* --- Cards --- */
+.teneo-detail-card {
+  padding: 36px;
+  border: 1px solid #222222;
+}
+.teneo-detail-card-title {
+  font-size: 24px;
+  font-weight: 400;
+  color: #FAFCFC;
+  line-height: 1;
+  margin-bottom: 24px;
+}
+
+/* Statistics */
+.teneo-detail-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.teneo-detail-stat-value {
+  font-size: 24px;
+  color: #D3F372;
+  line-height: 1;
+}
+.teneo-detail-stat-label {
+  font-size: 24px;
+  color: #FAFCFC;
+  line-height: 1;
+}
+
+/* Pricing card */
+.teneo-detail-pricing-value {
+  font-size: 24px;
+  color: #D3F372;
+  line-height: 1;
+}
+
+/* --- Explorer List --- */
+.teneo-detail-explorer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.teneo-detail-explorer-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #050506;
+  border: 1px solid #515151;
+  border-radius: 0;
+}
+.teneo-detail-explorer-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.teneo-detail-explorer-icon {
+  width: 12px;
+  height: 12px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.teneo-detail-explorer-name {
+  font-size: 24px;
+  font-weight: 500;
+  color: #FAFCFC;
+  line-height: 1;
+}
+.teneo-detail-explorer-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.teneo-detail-explorer-actions button,
+.teneo-detail-explorer-actions a {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #FAFCFC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+  text-decoration: none;
+}
+.teneo-detail-explorer-actions button:hover,
+.teneo-detail-explorer-actions a:hover { opacity: 0.6; }
+.teneo-detail-explorer-sep {
+  width: 1px;
+  height: 18px;
+  background: #FAFCFC;
+}
+
+/* --- About Card --- */
+.teneo-detail-about {
+  padding: 64px;
+  background: #050506;
+  border: 1px solid #222222;
+  border-left: none;
+  height: 100%;
+}
+.teneo-detail-about-title {
+  font-size: 24px;
+  font-weight: 400;
+  color: #D3F372;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.teneo-detail-about-text {
+  font-size: 16px;
+  color: #FAFCFC;
+  line-height: 1.5;
+}
+
+/* --- Pricing Table (tab content) --- */
+.teneo-detail-pricing-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #050506;
+  border: 1px solid #222222;
+  border-top: none;
+}
+.teneo-detail-pricing-table th {
+  text-align: left;
+  padding: 16px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #BAD3D8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #222;
+  background: #050506;
+}
+.teneo-detail-pricing-table td {
+  padding: 16px 24px;
+  font-size: 16px;
+  color: #FAFCFC;
+  border-bottom: 1px solid #222222;
+}
+.teneo-detail-pricing-table tr:hover td { background: rgba(211, 243, 114, 0.03); }
+.teneo-detail-price-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(211, 243, 114, 0.15);
+  color: #D3F372;
+  font-size: 14px;
+  font-weight: 500;
+}
+.teneo-detail-free-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(186, 211, 216, 0.1);
+  color: #BAD3D8;
+  font-size: 14px;
+}
+
+/* --- Commands --- */
+.teneo-detail-commands-section {
+  padding: 64px;
+  background: #050506;
+  border: 1px solid #222222;
+  border-top: none;
+}
+.teneo-detail-commands-list { display: flex; flex-direction: column; gap: 12px; }
+.teneo-detail-command-card {
+  padding: 24px;
+  border: 1px solid #222222;
+}
+.teneo-detail-command-trigger {
+  font-family: monospace;
+  font-size: 16px;
+  color: #D3F372;
+  margin-bottom: 8px;
+}
+.teneo-detail-command-desc { font-size: 16px; color: #FAFCFC; margin-bottom: 12px; }
+.teneo-detail-command-params { display: flex; flex-wrap: wrap; gap: 8px; }
+.teneo-detail-command-param {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background: #222222;
+  font-size: 13px;
+  color: #BAD3D8;
+  font-family: monospace;
+}
+.teneo-detail-command-param.required { border-left: 2px solid #D3F372; }
+.teneo-detail-command-param.optional { border-left: 2px solid #666; }
+
+/* Capabilities */
+.teneo-detail-capabilities { margin-top: 36px; }
+.teneo-detail-section-subtitle {
+  font-size: 24px;
+  font-weight: 400;
+  color: #FAFCFC;
+  margin-bottom: 24px;
+}
+.teneo-detail-capability-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid #222222;
+}
+.teneo-detail-capability-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #D3F372;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+.teneo-detail-capability-name { font-size: 16px; color: #FAFCFC; font-weight: 500; margin-bottom: 4px; }
+.teneo-detail-capability-desc { font-size: 14px; color: #BAD3D8; }
+
+/* --- FAQ --- */
+.teneo-detail-faq-section {
+  padding: 64px;
+  background: #050506;
+  border: 1px solid #222222;
+  border-top: none;
+}
+.teneo-detail-faq-list { display: flex; flex-direction: column; gap: 8px; }
+.teneo-detail-faq-item { border: 1px solid #222222; overflow: hidden; }
+.teneo-detail-faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #FAFCFC;
+  user-select: none;
+  transition: background 0.15s;
+}
+.teneo-detail-faq-question:hover { background: rgba(255,255,255,0.03); }
+.teneo-detail-faq-chevron {
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  margin-left: 16px;
+  color: #FAFCFC;
+}
+.teneo-detail-faq-item.open .teneo-detail-faq-chevron { transform: rotate(180deg); }
+.teneo-detail-faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0 24px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #FAFCFC;
+}
+.teneo-detail-faq-item.open .teneo-detail-faq-answer {
+  max-height: 500px;
+  padding: 0 24px 18px 24px;
+}
+
+/* --- Loading / Error --- */
+.teneo-detail-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  gap: 1rem;
+}
+.teneo-detail-error { text-align: center; padding: 3rem; color: #fca5a5; }
+.teneo-detail-error a { color: #D3F372; text-decoration: none; }
+.teneo-detail-error a:hover { text-decoration: underline; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .teneo-detail-columns { flex-direction: column; }
+  .teneo-detail-col-left { width: 100%; }
+  .teneo-detail-about { border-left: 1px solid #222222; border-top: none; }
+  .teneo-detail-agent-name { font-size: 28px; }
+  .teneo-detail-chat-btn { font-size: 18px; padding: 10px 20px; }
+  .teneo-detail-tab { padding: 12px 28px; font-size: 14px; }
+}
+@media (max-width: 768px) {
+  .teneo-detail-back { padding: 40px 0 24px; font-size: 16px; }
+  .teneo-detail-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .teneo-detail-header-right { gap: 20px; flex-wrap: wrap; }
+  .teneo-detail-agent-name { font-size: 24px; }
+  .teneo-detail-agent-id { font-size: 16px; }
+  .teneo-detail-status-label { font-size: 18px; }
+  .teneo-detail-status-dot { width: 18px; height: 18px; }
+  .teneo-detail-chat-btn { font-size: 16px; padding: 10px 20px; }
+  .teneo-detail-pill { font-size: 16px; padding: 8px 10px; }
+  .teneo-detail-description { font-size: 16px; padding-top: 24px; }
+  .teneo-detail-divider { margin-top: 40px; }
+  .teneo-detail-tab { padding: 10px 20px; font-size: 13px; }
+  .teneo-detail-card { padding: 24px; }
+  .teneo-detail-about { padding: 36px; }
+  .teneo-detail-explorer-name { font-size: 18px; }
+  .teneo-detail-stat-value, .teneo-detail-stat-label, .teneo-detail-card-title, .teneo-detail-pricing-value { font-size: 20px; }
+  .teneo-detail-commands-section, .teneo-detail-faq-section { padding: 36px; }
+}
+@media (max-width: 480px) {
+  .teneo-detail-avatar { width: 56px; height: 56px; font-size: 22px; }
+  .teneo-detail-agent-name { font-size: 20px; }
+  .teneo-detail-tab { padding: 10px 16px; font-size: 12px; }
+  .teneo-detail-about { padding: 24px; }
+  .teneo-detail-commands-section, .teneo-detail-faq-section { padding: 24px; }
+}
+    `;
+
     class TeneoAgentsWidget {
         constructor(container, options = {}) {
             this.container = container;
@@ -1513,41 +2092,11 @@
 
         getAgentLink(agent) {
             if (!agent) {
-                return 'https://developer.chatroom.teneo-protocol.ai/chatroom';
+                return { url: './', sameTab: true };
             }
-
-            const agentId = (agent.agent_id || '').toLowerCase();
-            const agentName = (agent.agent_name || '').toLowerCase();
-            const description = (agent.description || '').toLowerCase();
-
-            // Instagram agent
-            if (
-                agentId === 'instagram' ||
-                agentId === 'instagram-agent' ||
-                agentName === 'instagram' ||
-                description.includes('extract data from instagram')
-            ) {
-                return { url: 'https://teneo.pro/instagram-agent', sameTab: true };
-            }
-
-            // LinkedIn agent
-            if (
-                agentId === 'linkedin-agent' ||
-                agentName.includes('linkedin')
-            ) {
-                return { url: 'https://teneo.pro/linkedin-agent', sameTab: true };
-            }
-
-            // X follower/followings agent
-            if (
-                agentId === 'x-follower-followings-agent' ||
-                agentName.toLowerCase().includes('follower') && agentName.toLowerCase().includes('x ')
-            ) {
-                return { url: 'https://teneo.pro/x-follower-followings-agent', sameTab: true };
-            }
-
-            // Default chatroom link
-            return { url: 'https://developer.chatroom.teneo-protocol.ai/chatroom', sameTab: false };
+            // All agents link to the detail page
+            const detailUrl = `${WIDGET_CONFIG.detailPageUrl}?agent=${encodeURIComponent(agent.agent_id)}`;
+            return { url: detailUrl, sameTab: true };
         }
 
         createAgentCard(agent) {
@@ -1601,7 +2150,7 @@
                         </div>
                         <div class="teneo-widget-actions">
                             <a href="${targetUrl}" target="${targetAttr}" class="teneo-widget-btn">
-                                <div class="btn-text">Chat Now</div>
+                                <div class="btn-text">View Agent</div>
                             </a>
                         </div>
                     </div>
@@ -2056,11 +2605,546 @@
         }
     }
 
+    // ========================================================================
+    // TeneoAgentDetail — Detail page view (separate page, reads ?agent= param)
+    // ========================================================================
+    class TeneoAgentDetail {
+        constructor(container) {
+            this.container = container;
+            this.agent = null;
+            this.activeTab = 'statistics';
+            this.listPageUrl = './';
+            this.init();
+        }
+
+        async init() {
+            this.injectCSS();
+            this.container.innerHTML = `
+                <div class="teneo-detail-content">
+                    <div class="teneo-detail-loading">
+                        <div class="teneo-widget-spinner"></div>
+                        <p style="color:#BAD3D8;">Loading agent...</p>
+                    </div>
+                </div>
+            `;
+            const agentId = this.parseUrlParam();
+            if (!agentId) {
+                this.showError('No agent specified. <a href="' + this.listPageUrl + '">Browse all agents</a>');
+                return;
+            }
+            await this.loadAgent(agentId);
+        }
+
+        injectCSS() {
+            if (!document.getElementById('teneo-widget-styles')) {
+                const style = document.createElement('style');
+                style.id = 'teneo-widget-styles';
+                style.textContent = widgetCSS;
+                document.head.appendChild(style);
+            }
+            if (!document.getElementById('teneo-detail-styles')) {
+                const style = document.createElement('style');
+                style.id = 'teneo-detail-styles';
+                style.textContent = detailCSS;
+                document.head.appendChild(style);
+            }
+        }
+
+        parseUrlParam() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('agent');
+        }
+
+        parseJsonField(value, fallback) {
+            if (value === null || value === undefined) return fallback;
+            if (typeof value === 'string') {
+                try { return JSON.parse(value); } catch (e) { return fallback; }
+            }
+            return value;
+        }
+
+        async loadAgent(agentId) {
+            try {
+                const response = await fetch(`${WIDGET_CONFIG.apiUrl}?limit=500`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+                const agents = data.agents || [];
+                this.agent = agents.find(a => a.agent_id === agentId);
+
+                if (!this.agent) {
+                    this.showError('Agent "' + agentId + '" not found. <a href="' + this.listPageUrl + '">Browse all agents</a>');
+                    return;
+                }
+
+                // Parse JSON string fields
+                this.agent._categories = this.parseJsonField(this.agent.categories, []);
+                if (!Array.isArray(this.agent._categories)) this.agent._categories = [];
+                this.agent.commands = this.parseJsonField(this.agent.commands, []);
+                this.agent.capabilities = this.parseJsonField(this.agent.capabilities, []);
+                this.agent.faq_items = this.parseJsonField(this.agent.faq_items, []);
+                this.agent.network_request_counts = this.parseJsonField(this.agent.network_request_counts, {});
+
+                this.render();
+            } catch (error) {
+                console.error('Error loading agent:', error);
+                this.showError('Failed to load agent data. <a href="' + this.listPageUrl + '">Back to agents</a>');
+            }
+        }
+
+        showError(message) {
+            this.container.innerHTML = `
+                <div class="teneo-detail-content">
+                    <a href="${this.listPageUrl}" class="teneo-detail-back">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        Back to Agents
+                    </a>
+                    <div class="teneo-detail-error"><p>${message}</p></div>
+                </div>
+            `;
+        }
+
+        render() {
+            this.container.innerHTML = `
+                <div class="teneo-detail-content">
+                    ${this.renderBackNav()}
+                    ${this.renderHeader()}
+                    ${this.renderCategories()}
+                    ${this.renderDescription()}
+                    <div class="teneo-detail-divider"></div>
+                </div>
+                <div class="teneo-detail-tabs-section">
+                    ${this.renderTabs()}
+                    ${this.renderStatisticsTab()}
+                    ${this.renderPricingTab()}
+                    ${this.renderCommandsTab()}
+                    ${this.renderFAQTab()}
+                </div>
+            `;
+            this.loadDetailAvatar();
+            this.setupDetailEvents();
+        }
+
+        renderBackNav() {
+            return `
+                <a href="${this.listPageUrl}" class="teneo-detail-back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    Back
+                </a>
+            `;
+        }
+
+        renderHeader() {
+            const agent = this.agent;
+            const isOnline = agent.is_online;
+            const chatLink = this.getChatLink();
+            const imageInfo = this.convertIpfsUrl(agent.image_url);
+            const statusClass = isOnline ? '' : ' offline';
+
+            return `
+                <div class="teneo-detail-header">
+                    <div class="teneo-detail-header-left">
+                        <div class="teneo-detail-avatar" id="teneo-detail-avatar-wrap">
+                            ${imageInfo
+                                ? `<img id="teneo-detail-avatar-img" alt="${agent.agent_name}" style="display:none;">`
+                                : ''
+                            }
+                            <span id="teneo-detail-avatar-fallback" style="${imageInfo ? 'display:none;' : ''}">
+                                ${this.getInitials(agent.agent_name)}
+                            </span>
+                        </div>
+                        <div class="teneo-detail-name-block">
+                            <div class="teneo-detail-agent-name">${agent.agent_name || 'Unnamed Agent'}</div>
+                            <div class="teneo-detail-agent-id">${agent.agent_id || ''}</div>
+                        </div>
+                    </div>
+                    <div class="teneo-detail-header-right">
+                        <div class="teneo-detail-status${statusClass}">
+                            <span class="teneo-detail-status-label">${isOnline ? 'Online' : 'Offline'}</span>
+                            <span class="teneo-detail-status-dot"></span>
+                        </div>
+                        <a href="${chatLink.url}" target="${chatLink.sameTab ? '_self' : '_blank'}" class="teneo-detail-chat-btn">Chat now</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        renderCategories() {
+            const cats = this.agent._categories || [];
+            if (cats.length === 0) return '';
+            return `
+                <div class="teneo-detail-categories">
+                    ${cats.map(c => `<span class="teneo-detail-pill">${c}</span>`).join('')}
+                </div>
+            `;
+        }
+
+        renderDescription() {
+            const desc = this.agent.description;
+            if (!desc) return '';
+            return `<div class="teneo-detail-description">${this.renderMarkdown(desc)}</div>`;
+        }
+
+        renderTabs() {
+            const tabs = [
+                { id: 'statistics', label: 'Statistics' },
+                { id: 'pricing', label: 'Pricing' },
+                { id: 'commands', label: 'Commands & Capabilities' },
+                { id: 'faq', label: 'FAQ' }
+            ];
+            const faqItems = this.agent.faq_items;
+            const showFaq = Array.isArray(faqItems) && faqItems.length > 0;
+
+            return `
+                <div class="teneo-detail-tabs">
+                    ${tabs.filter(t => t.id !== 'faq' || showFaq).map(t =>
+                        `<button class="teneo-detail-tab${t.id === this.activeTab ? ' active' : ''}" data-tab="${t.id}">${t.label}</button>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        renderStatisticsTab() {
+            const agent = this.agent;
+            const totalRequests = agent.request_count || 0;
+            const networks = agent.network_request_counts || {};
+
+            return `
+                <div class="teneo-detail-tab-content${this.activeTab === 'statistics' ? ' active' : ''}" data-tab-content="statistics">
+                    <div class="teneo-detail-columns">
+                        <div class="teneo-detail-col-left">
+                            <div class="teneo-detail-card">
+                                <div class="teneo-detail-card-title">Statistics</div>
+                                <div class="teneo-detail-stat-row">
+                                    <span class="teneo-detail-stat-value">${this.formatNumber(totalRequests)}</span>
+                                    <span class="teneo-detail-stat-label">Total Agent Requests</span>
+                                </div>
+                            </div>
+                            <div class="teneo-detail-card">
+                                <div class="teneo-detail-card-title">Pricing</div>
+                                <span class="teneo-detail-pricing-value">Pay per event</span>
+                            </div>
+                            ${Object.keys(networks).length > 0 ? `
+                            <div class="teneo-detail-card">
+                                <div class="teneo-detail-card-title">Explorer</div>
+                                <div class="teneo-detail-explorer-list">
+                                    ${Object.entries(networks).map(([network, count]) => this.renderExplorerItem(network, count)).join('')}
+                                </div>
+                            </div>
+                            ` : ''}
+                        </div>
+                        <div class="teneo-detail-col-right">
+                            ${this.renderAboutCard()}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        renderExplorerItem(network, count) {
+            const explorerUrl = this.getExplorerUrl(network);
+            const displayName = network.charAt(0).toUpperCase() + network.slice(1);
+            const color = CHAIN_COLORS[network.toLowerCase()] || '#888';
+
+            return `
+                <div class="teneo-detail-explorer-item">
+                    <div class="teneo-detail-explorer-left">
+                        <div class="teneo-detail-explorer-icon" style="background:${color}"></div>
+                        <span class="teneo-detail-explorer-name">${displayName}</span>
+                    </div>
+                    <div class="teneo-detail-explorer-actions">
+                        <button title="Copy explorer link" data-copy-url="${explorerUrl}">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        </button>
+                        <span class="teneo-detail-explorer-sep"></span>
+                        <a href="${explorerUrl}" target="_blank" rel="noopener" title="Open explorer">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        renderAboutCard() {
+            const agent = this.agent;
+            const shortDesc = agent.short_description || agent.description || '';
+            const aboutText = shortDesc.length > 400 ? shortDesc.slice(0, 400) + '...' : shortDesc;
+
+            return `
+                <div class="teneo-detail-about">
+                    <div class="teneo-detail-about-title">About @${agent.agent_name || 'Agent'}</div>
+                    <div class="teneo-detail-about-text">${aboutText}</div>
+                </div>
+            `;
+        }
+
+        renderPricingTab() {
+            const commands = this.agent.commands || [];
+            if (commands.length === 0) {
+                return `<div class="teneo-detail-tab-content${this.activeTab === 'pricing' ? ' active' : ''}" data-tab-content="pricing">
+                    <div class="teneo-detail-tab-placeholder">No pricing information available.</div>
+                </div>`;
+            }
+
+            return `
+                <div class="teneo-detail-tab-content${this.activeTab === 'pricing' ? ' active' : ''}" data-tab-content="pricing">
+                    <table class="teneo-detail-pricing-table">
+                        <thead>
+                            <tr><th>Command</th><th>Description</th><th>Price</th><th>Unit</th></tr>
+                        </thead>
+                        <tbody>
+                            ${commands.map(cmd => {
+                                const price = cmd.pricePerUnit;
+                                const priceDisplay = price === 0
+                                    ? `<span class="teneo-detail-free-badge">Free</span>`
+                                    : `<span class="teneo-detail-price-badge">$${price}</span>`;
+                                return `<tr>
+                                    <td><code style="color:#D3F372;">${cmd.trigger}</code></td>
+                                    <td>${cmd.description || ''}</td>
+                                    <td>${priceDisplay}</td>
+                                    <td>${cmd.taskUnit || ''}</td>
+                                </tr>`;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        renderCommandsTab() {
+            const commands = this.agent.commands || [];
+            const capabilities = this.agent.capabilities || [];
+
+            return `
+                <div class="teneo-detail-tab-content${this.activeTab === 'commands' ? ' active' : ''}" data-tab-content="commands">
+                    <div class="teneo-detail-commands-section">
+                        ${commands.length > 0 ? `
+                            <div class="teneo-detail-section-subtitle">Commands</div>
+                            <div class="teneo-detail-commands-list">
+                                ${commands.map(cmd => `
+                                    <div class="teneo-detail-command-card">
+                                        <div class="teneo-detail-command-trigger">/${cmd.trigger}${cmd.argument ? ' ' + cmd.argument : ''}</div>
+                                        <div class="teneo-detail-command-desc">${cmd.description || ''}</div>
+                                        ${cmd.parameters && cmd.parameters.length > 0 ? `
+                                            <div class="teneo-detail-command-params">
+                                                ${cmd.parameters.map(p => `
+                                                    <span class="teneo-detail-command-param ${p.required ? 'required' : 'optional'}">
+                                                        ${p.name}: ${p.type}${p.required ? ' *' : ''}
+                                                    </span>
+                                                `).join('')}
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : '<p style="color:#BAD3D8;">No commands available.</p>'}
+
+                        ${capabilities.length > 0 ? `
+                            <div class="teneo-detail-capabilities">
+                                <div class="teneo-detail-section-subtitle">Capabilities</div>
+                                ${capabilities.map(cap => `
+                                    <div class="teneo-detail-capability-item">
+                                        <div class="teneo-detail-capability-dot"></div>
+                                        <div>
+                                            <div class="teneo-detail-capability-name">${cap.name || ''}</div>
+                                            <div class="teneo-detail-capability-desc">${cap.description || ''}</div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        renderFAQTab() {
+            const faqItems = this.agent.faq_items || [];
+            if (faqItems.length === 0) return '';
+
+            return `
+                <div class="teneo-detail-tab-content${this.activeTab === 'faq' ? ' active' : ''}" data-tab-content="faq">
+                    <div class="teneo-detail-faq-section">
+                        <div class="teneo-detail-faq-list">
+                            ${faqItems.map((item, i) => `
+                                <div class="teneo-detail-faq-item" data-faq="${i}">
+                                    <div class="teneo-detail-faq-question">
+                                        <span>${item.question}</span>
+                                        <svg class="teneo-detail-faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    </div>
+                                    <div class="teneo-detail-faq-answer">${item.answer}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        setupDetailEvents() {
+            // Tab switching
+            this.container.querySelectorAll('.teneo-detail-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    this.switchTab(tab.getAttribute('data-tab'));
+                });
+            });
+            // FAQ accordion
+            this.container.querySelectorAll('.teneo-detail-faq-question').forEach(q => {
+                q.addEventListener('click', () => {
+                    q.closest('.teneo-detail-faq-item').classList.toggle('open');
+                });
+            });
+            // Copy explorer URL
+            this.container.querySelectorAll('[data-copy-url]').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const url = btn.getAttribute('data-copy-url');
+                    navigator.clipboard.writeText(url).then(() => {
+                        const orig = btn.innerHTML;
+                        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#D3F372" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+                        setTimeout(() => { btn.innerHTML = orig; }, 1500);
+                    });
+                });
+            });
+        }
+
+        switchTab(tabId) {
+            this.activeTab = tabId;
+            this.container.querySelectorAll('.teneo-detail-tab').forEach(t => {
+                t.classList.toggle('active', t.getAttribute('data-tab') === tabId);
+            });
+            this.container.querySelectorAll('.teneo-detail-tab-content').forEach(p => {
+                p.classList.toggle('active', p.getAttribute('data-tab-content') === tabId);
+            });
+        }
+
+        async loadDetailAvatar() {
+            const imageInfo = this.convertIpfsUrl(this.agent.image_url);
+            if (!imageInfo) return;
+            const imgEl = document.getElementById('teneo-detail-avatar-img');
+            const fallbackEl = document.getElementById('teneo-detail-avatar-fallback');
+            if (!imgEl) return;
+            try {
+                await this.loadImageWithFallback(imageInfo, imgEl);
+                imgEl.style.display = 'block';
+                if (fallbackEl) fallbackEl.style.display = 'none';
+            } catch (e) {
+                imgEl.style.display = 'none';
+                if (fallbackEl) fallbackEl.style.display = 'flex';
+            }
+        }
+
+        // Chat link logic (same as list page getAgentLink)
+        getChatLink() {
+            const agent = this.agent;
+            if (!agent) return { url: 'https://developer.chatroom.teneo-protocol.ai/chatroom', sameTab: false };
+            const agentId = (agent.agent_id || '').toLowerCase();
+            const agentName = (agent.agent_name || '').toLowerCase();
+            const description = (agent.description || '').toLowerCase();
+
+            if (agentId === 'instagram' || agentId === 'instagram-agent' || agentName === 'instagram' || description.includes('extract data from instagram')) {
+                return { url: 'https://teneo.pro/instagram-agent', sameTab: true };
+            }
+            if (agentId === 'linkedin-agent' || agentName.includes('linkedin')) {
+                return { url: 'https://teneo.pro/linkedin-agent', sameTab: true };
+            }
+            if (agentId === 'x-follower-followings-agent' || (agentName.includes('follower') && agentName.includes('x '))) {
+                return { url: 'https://teneo.pro/x-follower-followings-agent', sameTab: true };
+            }
+            return { url: 'https://developer.chatroom.teneo-protocol.ai/chatroom', sameTab: false };
+        }
+
+        getInitials(name) {
+            if (!name) return '?';
+            return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+        }
+
+        formatNumber(num) {
+            if (num === undefined || num === null) return '0';
+            if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+            return num.toString();
+        }
+
+        getExplorerUrl(network) {
+            return (WIDGET_CONFIG.explorerUrls || {})[network.toLowerCase()] || '#';
+        }
+
+        convertIpfsUrl(ipfsUrl) {
+            if (!ipfsUrl) return null;
+            if (!ipfsUrl.startsWith('http://') && !ipfsUrl.startsWith('https://') && !ipfsUrl.startsWith('ipfs://')) return null;
+            if (ipfsUrl.startsWith('ipfs://')) {
+                const hash = ipfsUrl.replace('ipfs://', '').split('/')[0];
+                if (!hash) return null;
+                return {
+                    gateways: [
+                        `https://gateway.pinata.cloud/ipfs/${hash}`,
+                        `https://ipfs.io/ipfs/${hash}`,
+                        `https://4everland.io/ipfs/${hash}`
+                    ],
+                    isIpfs: true
+                };
+            }
+            return { url: ipfsUrl, isIpfs: false };
+        }
+
+        async loadImageWithFallback(imageInfo, imgElement) {
+            if (!imageInfo || !imgElement) throw new Error('Invalid');
+            if (!imageInfo.isIpfs) {
+                if (!imageInfo.url || (!imageInfo.url.startsWith('http://') && !imageInfo.url.startsWith('https://'))) throw new Error('Invalid URL');
+                return new Promise((resolve, reject) => {
+                    const t = new Image();
+                    const to = setTimeout(() => reject(new Error('Timeout')), 5000);
+                    t.onload = () => { clearTimeout(to); imgElement.src = imageInfo.url; resolve(); };
+                    t.onerror = () => { clearTimeout(to); reject(new Error('Failed')); };
+                    t.src = imageInfo.url;
+                });
+            }
+            for (const gw of imageInfo.gateways) {
+                try {
+                    await new Promise((resolve, reject) => {
+                        const t = new Image();
+                        const to = setTimeout(() => reject(new Error('Timeout')), 5000);
+                        t.onload = () => { clearTimeout(to); imgElement.src = gw; resolve(); };
+                        t.onerror = () => { clearTimeout(to); reject(new Error('Failed')); };
+                        t.src = gw;
+                    });
+                    return;
+                } catch (e) { continue; }
+            }
+            throw new Error('All gateways failed');
+        }
+
+        renderMarkdown(text) {
+            if (!text) return '';
+            let html = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+            html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+            html = html.replace(/^# (.+)$/gm, '<h2>$1</h2>');
+            html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+            html = html.replace(/(^- .+$(\n- .+$)*)/gm, (match) => {
+                const items = match.split('\n').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('');
+                return `<ul>${items}</ul>`;
+            });
+            html = html.split(/\n\n+/).map(block => {
+                block = block.trim();
+                if (!block) return '';
+                if (block.startsWith('<h') || block.startsWith('<ul') || block.startsWith('<ol')) return block;
+                return `<p>${block.replace(/\n/g, '<br>')}</p>`;
+            }).join('');
+            return html;
+        }
+    }
+
     // Auto-initialize when DOM is ready
     function initWidget() {
-        const container = document.getElementById(WIDGET_CONFIG.containerId);
-        if (container && !window.teneoWidget) {
-            window.teneoWidget = new TeneoAgentsWidget(container);
+        const detailContainer = document.getElementById(WIDGET_CONFIG.detailContainerId);
+        const listContainer = document.getElementById(WIDGET_CONFIG.containerId);
+
+        if (detailContainer) {
+            window.teneoAgentDetail = new TeneoAgentDetail(detailContainer);
+        } else if (listContainer && !window.teneoWidget) {
+            window.teneoWidget = new TeneoAgentsWidget(listContainer);
         }
     }
 
@@ -2071,9 +3155,10 @@
         initWidget();
     }
 
-    // Expose widget class globally for manual initialization
+    // Expose classes globally
     window.TeneoAgentsWidget = TeneoAgentsWidget;
-    
+    window.TeneoAgentDetail = TeneoAgentDetail;
+
     // Expose showManagePopup globally
     window.showManagePopup = function() {
         if (window.teneoWidget) {
