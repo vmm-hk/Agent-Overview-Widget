@@ -18,7 +18,7 @@
             'messaribtceth',
             'vc-attention'
         ],
-        detailPageUrl: '/agent-ecosystem/agent-detail',
+        detailPageUrl: '/linkedin-agent',
         explorerUrls: {
             peaq: 'https://peaq.subscan.io',
             base: 'https://basescan.org',
