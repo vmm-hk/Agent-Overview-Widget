@@ -18,7 +18,7 @@
             'messaribtceth',
             'vc-attention'
         ],
-        detailPageUrl: '/linkedin-agent',
+        detailPageUrl: '/agent-ecosystem',
         explorerUrls: {
             peaq: 'https://peaq.subscan.io',
             base: 'https://basescan.org',
@@ -3140,9 +3140,14 @@
     function initWidget() {
         const detailContainer = document.getElementById(WIDGET_CONFIG.detailContainerId);
         const listContainer = document.getElementById(WIDGET_CONFIG.containerId);
+        const hasAgentParam = new URLSearchParams(window.location.search).has('agent');
 
         if (detailContainer) {
             window.teneoAgentDetail = new TeneoAgentDetail(detailContainer);
+        } else if (listContainer && hasAgentParam) {
+            // Same page: show detail view when ?agent= param is present
+            listContainer.id = WIDGET_CONFIG.detailContainerId;
+            window.teneoAgentDetail = new TeneoAgentDetail(listContainer);
         } else if (listContainer && !window.teneoWidget) {
             window.teneoWidget = new TeneoAgentsWidget(listContainer);
         }
