@@ -18,7 +18,7 @@
             'messaribtceth',
             'vc-attention'
         ],
-        detailPageUrl: './detail.html',
+        detailPageUrl: '/agent-ecosystem',
         explorerUrls: {
             peaq: 'https://peaq.subscan.io',
             base: 'https://basescan.org',
@@ -2094,8 +2094,8 @@
             if (!agent) {
                 return { url: './', sameTab: true };
             }
-            // All agents link to the detail page
-            const detailUrl = `${WIDGET_CONFIG.detailPageUrl}?agent=${encodeURIComponent(agent.agent_id)}`;
+            // All agents link to the detail page: /agent-ecosystem/{agent_id}
+            const detailUrl = `${WIDGET_CONFIG.detailPageUrl}/${encodeURIComponent(agent.agent_id)}`;
             return { url: detailUrl, sameTab: true };
         }
 
@@ -2613,7 +2613,7 @@
             this.container = container;
             this.agent = null;
             this.activeTab = 'statistics';
-            this.listPageUrl = './';
+            this.listPageUrl = WIDGET_CONFIG.detailPageUrl || '/agent-ecosystem';
             this.init();
         }
 
@@ -2651,6 +2651,12 @@
         }
 
         parseUrlParam() {
+            // Try path-based: /agent-ecosystem/{agent_id}
+            const pathSegments = window.location.pathname.split('/').filter(Boolean);
+            if (pathSegments.length >= 2) {
+                return decodeURIComponent(pathSegments[pathSegments.length - 1]);
+            }
+            // Fallback to query param: ?agent={agent_id}
             const params = new URLSearchParams(window.location.search);
             return params.get('agent');
         }
