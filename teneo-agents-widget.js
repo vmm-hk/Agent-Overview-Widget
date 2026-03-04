@@ -3040,23 +3040,7 @@
             }
         }
 
-        // Chat link logic (same as list page getAgentLink)
         getChatLink() {
-            const agent = this.agent;
-            if (!agent) return { url: 'https://developer.chatroom.teneo-protocol.ai/chatroom', sameTab: false };
-            const agentId = (agent.agent_id || '').toLowerCase();
-            const agentName = (agent.agent_name || '').toLowerCase();
-            const description = (agent.description || '').toLowerCase();
-
-            if (agentId === 'instagram' || agentId === 'instagram-agent' || agentName === 'instagram' || description.includes('extract data from instagram')) {
-                return { url: 'https://teneo.pro/instagram-agent', sameTab: true };
-            }
-            if (agentId === 'linkedin-agent' || agentName.includes('linkedin')) {
-                return { url: 'https://teneo.pro/linkedin-agent', sameTab: true };
-            }
-            if (agentId === 'x-follower-followings-agent' || (agentName.includes('follower') && agentName.includes('x '))) {
-                return { url: 'https://teneo.pro/x-follower-followings-agent', sameTab: true };
-            }
             return { url: 'https://developer.chatroom.teneo-protocol.ai/chatroom', sameTab: false };
         }
 
