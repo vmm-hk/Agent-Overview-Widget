@@ -1382,7 +1382,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 48px;
+  flex: 1;
+  padding: 12px 24px;
   font-family: inherit;
   font-size: 16px;
   font-weight: 500;
@@ -1475,6 +1476,12 @@
   background: #050506;
   border: 1px solid #515151;
   border-radius: 0;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.teneo-detail-explorer-item:hover {
+  background: #111;
 }
 .teneo-detail-explorer-left {
   display: flex;
@@ -2612,7 +2619,7 @@
         constructor(container) {
             this.container = container;
             this.agent = null;
-            this.activeTab = 'statistics';
+            this.activeTab = 'readme';
             this.listPageUrl = '/agent-ecosystem';
             this.init();
         }
@@ -2704,6 +2711,9 @@
         }
 
         render() {
+            const agent = this.agent;
+            const networks = agent.network_request_counts || {};
+
             this.container.innerHTML = `
                 <div class="teneo-detail-content">
                     ${this.renderBackNav()}
@@ -2713,11 +2723,36 @@
                     <div class="teneo-detail-divider"></div>
                 </div>
                 <div class="teneo-detail-tabs-section">
-                    ${this.renderTabs()}
-                    ${this.renderStatisticsTab()}
-                    ${this.renderPricingTab()}
-                    ${this.renderCommandsTab()}
-                    ${this.renderFAQTab()}
+                    <div class="teneo-detail-columns">
+                        <div class="teneo-detail-col-left">
+                            <div class="teneo-detail-card">
+                                <div class="teneo-detail-card-title">Statistics</div>
+                                <div class="teneo-detail-stat-row">
+                                    <span class="teneo-detail-stat-value">${this.formatNumber(agent.request_count || 0)}</span>
+                                    <span class="teneo-detail-stat-label">Total Agent Requests</span>
+                                </div>
+                            </div>
+                            <div class="teneo-detail-card">
+                                <div class="teneo-detail-card-title">Pricing</div>
+                                <span class="teneo-detail-pricing-value">Pay per event</span>
+                            </div>
+                            ${Object.keys(networks).length > 0 ? `
+                            <div class="teneo-detail-card">
+                                <div class="teneo-detail-card-title">Explorer</div>
+                                <div class="teneo-detail-explorer-list">
+                                    ${Object.entries(networks).map(([network, count]) => this.renderExplorerItem(network, count)).join('')}
+                                </div>
+                            </div>
+                            ` : ''}
+                        </div>
+                        <div class="teneo-detail-col-right">
+                            ${this.renderTabs()}
+                            ${this.renderReadmeTab()}
+                            ${this.renderPricingTab()}
+                            ${this.renderCommandsTab()}
+                            ${this.renderFAQTab()}
+                        </div>
+                    </div>
                 </div>
             `;
             this.loadDetailAvatar();
@@ -2779,14 +2814,14 @@
         }
 
         renderDescription() {
-            const desc = this.agent.description;
+            const desc = this.agent.short_description || this.agent.description || '';
             if (!desc) return '';
-            return `<div class="teneo-detail-description">${this.renderMarkdown(desc)}</div>`;
+            return `<div class="teneo-detail-description">${desc}</div>`;
         }
 
         renderTabs() {
             const tabs = [
-                { id: 'statistics', label: 'Statistics' },
+                { id: 'readme', label: 'Read Me' },
                 { id: 'pricing', label: 'Pricing' },
                 { id: 'commands', label: 'Commands & Capabilities' },
                 { id: 'faq', label: 'FAQ' }
@@ -2803,41 +2838,21 @@
             `;
         }
 
-        renderStatisticsTab() {
-            const agent = this.agent;
-            const totalRequests = agent.request_count || 0;
-            const networks = agent.network_request_counts || {};
-
+        renderReadmeTab() {
+            const desc = this.agent.description || '';
             return `
-                <div class="teneo-detail-tab-content${this.activeTab === 'statistics' ? ' active' : ''}" data-tab-content="statistics">
-                    <div class="teneo-detail-columns">
-                        <div class="teneo-detail-col-left">
-                            <div class="teneo-detail-card">
-                                <div class="teneo-detail-card-title">Statistics</div>
-                                <div class="teneo-detail-stat-row">
-                                    <span class="teneo-detail-stat-value">${this.formatNumber(totalRequests)}</span>
-                                    <span class="teneo-detail-stat-label">Total Agent Requests</span>
-                                </div>
-                            </div>
-                            <div class="teneo-detail-card">
-                                <div class="teneo-detail-card-title">Pricing</div>
-                                <span class="teneo-detail-pricing-value">Pay per event</span>
-                            </div>
-                            ${Object.keys(networks).length > 0 ? `
-                            <div class="teneo-detail-card">
-                                <div class="teneo-detail-card-title">Explorer</div>
-                                <div class="teneo-detail-explorer-list">
-                                    ${Object.entries(networks).map(([network, count]) => this.renderExplorerItem(network, count)).join('')}
-                                </div>
-                            </div>
-                            ` : ''}
-                        </div>
-                        <div class="teneo-detail-col-right">
-                            ${this.renderAboutCard()}
-                        </div>
+                <div class="teneo-detail-tab-content${this.activeTab === 'readme' ? ' active' : ''}" data-tab-content="readme">
+                    <div class="teneo-detail-about">
+                        <div class="teneo-detail-about-title">About @${this.agent.agent_name || 'Agent'}</div>
+                        <div class="teneo-detail-about-text teneo-detail-description">${desc ? this.renderMarkdown(desc) : 'No description available.'}</div>
                     </div>
                 </div>
             `;
+        }
+
+        renderStatisticsTab() {
+            // Statistics tab removed — sidebar is always visible
+            return '';
         }
 
         renderExplorerItem(network, count) {
@@ -2846,21 +2861,13 @@
             const color = CHAIN_COLORS[network.toLowerCase()] || '#888';
 
             return `
-                <div class="teneo-detail-explorer-item">
+                <a class="teneo-detail-explorer-item" href="${explorerUrl}" target="_blank" rel="noopener" title="Open ${displayName} explorer">
                     <div class="teneo-detail-explorer-left">
                         <div class="teneo-detail-explorer-icon" style="background:${color}"></div>
                         <span class="teneo-detail-explorer-name">${displayName}</span>
                     </div>
-                    <div class="teneo-detail-explorer-actions">
-                        <button title="Copy explorer link" data-copy-url="${explorerUrl}">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                        </button>
-                        <span class="teneo-detail-explorer-sep"></span>
-                        <a href="${explorerUrl}" target="_blank" rel="noopener" title="Open explorer">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                        </a>
-                    </div>
-                </div>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </a>
             `;
         }
 
