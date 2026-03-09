@@ -1182,16 +1182,36 @@
   color: #BAD3D8;
   background: #09090a;
   -webkit-font-smoothing: antialiased;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  position: relative;
 }
+.teneo-detail-grid-lines {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  pointer-events: none;
+  z-index: 0;
+}
+.teneo-detail-grid-line {
+  border-left: 0.5px solid rgba(158, 181, 188, 0.15);
+  border-right: 0.5px solid rgba(158, 181, 188, 0.15);
+}
+.teneo-detail-grid-line:first-child { border-left: none; }
+.teneo-detail-grid-line:last-child { border-right: none; }
 
 .teneo-detail-content {
-  max-width: 1328px;
-  margin: 0 auto;
-  padding: 0 200px;
+  grid-column: 2 / 8;
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
 }
-@media (max-width: 1440px) { .teneo-detail-content { padding: 0 80px; } }
-@media (max-width: 1024px) { .teneo-detail-content { padding: 0 40px; } }
-@media (max-width: 640px)  { .teneo-detail-content { padding: 0 20px; } }
+.teneo-detail-tabs-section {
+  z-index: 1;
+}
+@media (max-width: 1024px) { .teneo-detail-content { grid-column: 1 / -1; padding: 0 40px; } }
+@media (max-width: 640px)  { .teneo-detail-content { grid-column: 1 / -1; padding: 0 20px; } }
 
 /* --- Back Link --- */
 .teneo-detail-back {
@@ -1365,11 +1385,22 @@
 
 /* --- Tabs Section --- */
 .teneo-detail-tabs-section {
-  border-left: 1px solid #222222;
-  border-right: 1px solid #222222;
-  max-width: 1328px;
-  margin: 0 auto;
+  grid-column: 2 / 8;
+  position: relative;
 }
+.teneo-detail-tabs-section::before,
+.teneo-detail-tabs-section::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 1px;
+  background: #222222;
+}
+.teneo-detail-tabs-section::before { top: 0; }
+.teneo-detail-tabs-section::after { bottom: 0; }
+@media (max-width: 1024px) { .teneo-detail-tabs-section { grid-column: 1 / -1; } }
 .teneo-detail-tabs {
   display: flex;
   align-items: flex-end;
@@ -1411,7 +1442,7 @@
 .teneo-detail-columns {
   display: flex;
   gap: 0;
-  align-items: stretch;
+  align-items: flex-start;
 }
 .teneo-detail-col-left {
   width: 441px;
@@ -1471,7 +1502,7 @@
 .teneo-detail-explorer-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 16px;
   padding: 12px 16px;
   background: #050506;
   border: 1px solid #515151;
@@ -1480,6 +1511,9 @@
   cursor: pointer;
   transition: background 0.15s;
 }
+.teneo-detail-explorer-item .teneo-detail-explorer-left {
+  flex: 1;
+}
 .teneo-detail-explorer-item:hover {
   background: #111;
 }
@@ -1487,6 +1521,9 @@
   display: flex;
   align-items: center;
   gap: 10px;
+}
+.teneo-detail-explorer-left svg {
+  flex-shrink: 0;
 }
 .teneo-detail-explorer-icon {
   width: 12px;
@@ -1529,9 +1566,8 @@
 /* --- About Card --- */
 .teneo-detail-about {
   padding: 64px;
-  background: #050506;
+  background: #09090a;
   border: 1px solid #222222;
-  border-left: none;
   height: 100%;
 }
 .teneo-detail-about-title {
@@ -1551,7 +1587,7 @@
 .teneo-detail-pricing-table {
   width: 100%;
   border-collapse: collapse;
-  background: #050506;
+  background: #09090a;
   border: 1px solid #222222;
   border-top: none;
 }
@@ -1564,7 +1600,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   border-bottom: 1px solid #222;
-  background: #050506;
+  background: #09090a;
 }
 .teneo-detail-pricing-table td {
   padding: 16px 24px;
@@ -1592,7 +1628,7 @@
 /* --- Commands --- */
 .teneo-detail-commands-section {
   padding: 64px;
-  background: #050506;
+  background: #09090a;
   border: 1px solid #222222;
   border-top: none;
 }
@@ -1650,7 +1686,7 @@
 /* --- FAQ --- */
 .teneo-detail-faq-section {
   padding: 64px;
-  background: #050506;
+  background: #09090a;
   border: 1px solid #222222;
   border-top: none;
 }
@@ -1706,7 +1742,7 @@
 @media (max-width: 1024px) {
   .teneo-detail-columns { flex-direction: column; }
   .teneo-detail-col-left { width: 100%; }
-  .teneo-detail-about { border-left: 1px solid #222222; border-top: none; }
+  .teneo-detail-about { border-top: none; }
   .teneo-detail-agent-name { font-size: 28px; }
   .teneo-detail-chat-btn { font-size: 18px; padding: 10px 20px; }
   .teneo-detail-tab { padding: 12px 28px; font-size: 14px; }
@@ -2715,6 +2751,7 @@
             const networks = agent.network_request_counts || {};
 
             this.container.innerHTML = `
+                <div class="teneo-detail-grid-lines">${'<div class="teneo-detail-grid-line"></div>'.repeat(8)}</div>
                 <div class="teneo-detail-content">
                     ${this.renderBackNav()}
                     ${this.renderHeader()}
@@ -2843,7 +2880,6 @@
             return `
                 <div class="teneo-detail-tab-content${this.activeTab === 'readme' ? ' active' : ''}" data-tab-content="readme">
                     <div class="teneo-detail-about">
-                        <div class="teneo-detail-about-title">About @${this.agent.agent_name || 'Agent'}</div>
                         <div class="teneo-detail-about-text teneo-detail-description">${desc ? this.renderMarkdown(desc) : 'No description available.'}</div>
                     </div>
                 </div>
@@ -2855,18 +2891,27 @@
             return '';
         }
 
+        getChainLogo(network) {
+            const logos = {
+                peaq: `<svg width="24" height="24" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="12" rx="6" fill="white"/><path d="M8.28751 7.99996H8.06905L7.87806 7.97853C7.63869 7.94445 7.33389 7.85319 7.12228 7.73532C7.03999 7.68948 6.87655 7.55007 6.83996 7.46358C6.8141 7.40247 6.81266 7.24092 6.82054 7.17296C6.82536 7.13144 6.85609 7.09282 6.87296 7.05567L7.76231 5.73991C7.7937 5.70018 7.83557 5.67672 7.88565 5.66908L8.41744 5.66895C8.48105 5.68805 8.54412 5.76216 8.52977 5.83196C8.24065 6.25557 7.94249 6.6737 7.65044 7.09557C7.6523 7.15078 7.62623 7.23976 7.69396 7.26376C7.77531 7.29257 7.89468 7.31387 7.9809 7.32342C8.35446 7.36481 8.73923 7.28979 8.99659 6.99845C9.02423 6.96719 9.04671 6.92688 9.07315 6.89715C9.09959 6.86742 9.1361 6.83998 9.16345 6.80967C9.62322 6.29991 9.54918 5.43857 9.05009 4.98257C8.48736 4.46837 7.68575 4.54941 7.1415 5.04477C7.01288 5.16181 6.91756 5.29911 6.81666 5.43961C6.60987 5.72758 6.41658 6.02194 6.23388 6.32561C5.77514 7.08809 5.07975 7.8534 4.1546 7.97862L3.95528 7.99996H3.74094L3.55457 7.97804C2.7073 7.83588 2.03089 7.09312 1.93147 6.23929L1.91906 6.10041C1.92161 6.0317 1.91563 5.96162 1.91906 5.89303C1.94104 5.45227 2.11648 5.02056 2.41571 4.69846C2.71192 4.37964 3.01371 4.1552 3.44493 4.05435C4.00527 3.92332 4.50312 4.03928 5.00216 4.29428C5.03033 4.30869 5.06853 4.31662 5.09435 4.33427C5.12632 4.3561 5.24417 4.47995 5.26269 4.51329C5.30357 4.58699 5.30312 4.74438 5.29491 4.82916C5.28851 4.89518 5.25506 4.92918 5.22144 4.97921C4.92799 5.4159 4.62398 5.84694 4.32413 6.27865C4.28697 6.30626 4.23916 6.3291 4.19246 6.33283C4.01567 6.34691 3.81969 6.32283 3.64095 6.33167C3.61963 6.32905 3.58357 6.29389 3.57796 6.27479C3.57396 6.26125 3.57376 6.18856 3.5759 6.17282C3.57776 6.15929 3.587 6.15165 3.59335 6.1406L4.46331 4.94222C4.46859 4.92901 4.4688 4.83415 4.4655 4.81775C4.46203 4.80056 4.44021 4.77872 4.42408 4.77232C3.9806 4.59662 3.51353 4.64445 3.13131 4.93329C2.75346 5.21881 2.55707 5.61158 2.58277 6.09418C2.61927 6.77895 3.2754 7.36394 3.95346 7.33243C5.02336 7.28269 5.51671 6.11553 6.04838 5.35503C6.55051 4.63673 7.16394 4.03641 8.09153 4.00158C9.00237 3.96737 9.85971 4.53347 10.1156 5.42437C10.1333 5.48602 10.1591 5.57508 10.1632 5.63777C10.1783 5.86924 10.1519 6.11764 10.1625 6.35085C9.99125 7.24669 9.19517 7.95213 8.28751 8V7.99996Z" fill="#6666FD"/></svg>`,
+                base: `<svg width="24" height="24" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 0C9.31371 0 12 2.68629 12 6C12 9.31371 9.31371 12 6 12C2.68629 12 0 9.31371 0 6C0 2.68629 2.68629 0 6 0Z" fill="#FDFDFE"/><path d="M2.71304 2.43727C2.71057 2.43727 2.70807 2.43765 2.70571 2.43838C2.47748 2.5096 2.40365 2.65464 2.38882 2.8882V9.08944C2.41118 9.30559 2.48571 9.49938 2.72795 9.52174H9.21242C9.38012 9.50311 9.51056 9.3764 9.52919 9.20497L9.51539 3.17245C9.51466 2.85398 9.45889 2.4574 9.14161 2.42981L2.71304 2.43727Z" fill="#0052FF"/></svg>`,
+                avalanche: `<svg width="24" height="24" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip_avax)"><path d="M12 6C12 9.31684 9.31241 12 6.00285 12C2.6933 12 0 9.31684 0 6C0 2.68316 2.68759 0 5.99715 0C9.3067 0 11.9943 2.68887 11.9943 6H12ZM5.9572 2.22645C5.91155 2.23216 5.86591 2.2607 5.83167 2.28925C4.66191 4.29876 3.49215 6.31399 2.34522 8.33492C2.31669 8.48335 2.41369 8.62036 2.56776 8.63178C3.36091 8.62036 4.15977 8.64891 4.95292 8.61465L5.03852 8.56898C5.83737 7.23311 6.6077 5.87441 7.37803 4.52141C7.40656 4.43578 7.36662 4.36727 7.32668 4.29305C6.99572 3.63083 6.52782 2.98573 6.19116 2.3235C6.13409 2.24929 6.0428 2.20932 5.9515 2.22645H5.9572ZM8.00571 5.81161C7.95435 5.82303 7.89729 5.86299 7.86876 5.90295C7.46362 6.67935 6.93295 7.43292 6.53352 8.20932C6.48787 8.29496 6.46505 8.34063 6.47646 8.44339C6.49358 8.53473 6.602 8.62607 6.699 8.62607H9.41512C9.65478 8.59182 9.69472 8.42626 9.59772 8.22645C9.21541 7.45005 8.66191 6.70219 8.26819 5.92579C8.19971 5.82873 8.12554 5.78877 8 5.81161H8.00571Z" fill="#EA4242"/><path d="M5.9589 2.22537C6.05591 2.20825 6.1415 2.24819 6.19856 2.32237C6.54093 2.98999 7.00312 3.62908 7.33408 4.29099C7.36832 4.36517 7.40826 4.43364 7.38544 4.51923C6.61511 5.87159 5.83907 7.22965 5.04592 8.56488L4.96033 8.61053C4.16718 8.64477 3.36832 8.61053 2.57516 8.62765C2.4211 8.62194 2.32409 8.47929 2.35262 8.33093C3.49956 6.31096 4.66932 4.29669 5.83907 2.28814C5.87331 2.2596 5.91896 2.23107 5.96461 2.22537H5.9589Z" fill="#FFFEFE"/><path d="M8.00903 5.80887C8.13456 5.78605 8.20304 5.82599 8.27722 5.92299C8.67094 6.69903 9.22443 7.44653 9.60675 8.22257C9.70375 8.42228 9.66381 8.58776 9.42415 8.622H6.70803C6.61103 8.622 6.50261 8.5307 6.48549 8.4394C6.46837 8.33669 6.4969 8.29104 6.54255 8.20545C6.94198 7.42941 7.47265 6.6762 7.87779 5.90017C7.90632 5.86023 7.96338 5.81458 8.01473 5.80887H8.00903Z" fill="#FFFEFE"/></g><defs><clipPath id="clip_avax"><rect width="12" height="12" fill="white"/></clipPath></defs></svg>`,
+            };
+            return logos[network.toLowerCase()] || `<div class="teneo-detail-explorer-icon" style="background:${CHAIN_COLORS[network.toLowerCase()] || '#888'}"></div>`;
+        }
+
         renderExplorerItem(network, count) {
             const explorerUrl = this.getExplorerUrl(network);
             const displayName = network.charAt(0).toUpperCase() + network.slice(1);
-            const color = CHAIN_COLORS[network.toLowerCase()] || '#888';
 
             return `
                 <a class="teneo-detail-explorer-item" href="${explorerUrl}" target="_blank" rel="noopener" title="Open ${displayName} explorer">
                     <div class="teneo-detail-explorer-left">
-                        <div class="teneo-detail-explorer-icon" style="background:${color}"></div>
+                        ${this.getChainLogo(network)}
                         <span class="teneo-detail-explorer-name">${displayName}</span>
                     </div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    <svg width="1" height="18" viewBox="0 0 1 18" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0.5" x2="0.5" y2="18" stroke="white"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.5 5.83333L16.5 0.5M16.5 0.5H11.1667M16.5 0.5L9.38889 7.61111M6.72222 2.27778H4.76667C3.27319 2.27778 2.52646 2.27778 1.95603 2.56843C1.45426 2.82409 1.04631 3.23204 0.790649 3.7338C0.5 4.30423 0.5 5.05097 0.5 6.54445V12.2333C0.5 13.7268 0.5 14.4735 0.790649 15.044C1.04631 15.5457 1.45426 15.9537 1.95603 16.2094C2.52646 16.5 3.27319 16.5 4.76667 16.5H10.4556C11.949 16.5 12.6958 16.5 13.2662 16.2094C13.768 15.9537 14.1759 15.5457 14.4316 15.044C14.7222 14.4735 14.7222 13.7268 14.7222 12.2333V10.2778" stroke="white" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </a>
             `;
         }
@@ -2878,7 +2923,6 @@
 
             return `
                 <div class="teneo-detail-about">
-                    <div class="teneo-detail-about-title">About @${agent.agent_name || 'Agent'}</div>
                     <div class="teneo-detail-about-text">${aboutText}</div>
                 </div>
             `;
