@@ -1639,11 +1639,11 @@
 .teneo-pricing-grid-row {
   display: flex;
   gap: 12px;
-  align-items: center;
+  align-items: stretch;
 }
 .teneo-pricing-grid-row .teneo-pricing-grid-cell {
   background: #222222;
-  height: 102px;
+  min-height: 102px;
   display: flex;
   align-items: center;
   border: 1px solid #000000;
@@ -1654,7 +1654,7 @@
   flex-direction: column;
   align-items: flex-start !important;
   justify-content: center;
-  padding: 0 48px;
+  padding: 16px 48px;
   gap: 8px;
 }
 .teneo-pricing-grid-cell--price,
