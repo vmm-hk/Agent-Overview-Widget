@@ -1583,146 +1583,212 @@
   line-height: 1.5;
 }
 
-/* --- Pricing Table (tab content) --- */
-.teneo-detail-pricing-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #09090a;
-  border: 1px solid #222222;
-  border-top: none;
-}
-.teneo-detail-pricing-table th {
-  text-align: left;
-  padding: 16px 24px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #BAD3D8;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-bottom: 1px solid #222;
-  background: #09090a;
-}
-.teneo-detail-pricing-table td {
-  padding: 16px 24px;
-  font-size: 16px;
-  color: #FAFCFC;
-  border-bottom: 1px solid #222222;
-}
-.teneo-detail-pricing-table tr:hover td { background: rgba(211, 243, 114, 0.03); }
-.teneo-detail-price-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  background: rgba(211, 243, 114, 0.15);
-  color: #D3F372;
-  font-size: 14px;
-  font-weight: 500;
-}
-.teneo-detail-free-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  background: rgba(186, 211, 216, 0.1);
-  color: #BAD3D8;
-  font-size: 14px;
-}
-
-/* --- Commands --- */
-.teneo-detail-commands-section {
-  padding: 64px;
-  background: #09090a;
-  border: 1px solid #222222;
-  border-top: none;
-}
-.teneo-detail-commands-list { display: flex; flex-direction: column; gap: 12px; }
-.teneo-detail-command-card {
+/* --- Pricing (tab content) --- */
+.teneo-pricing-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
   padding: 24px;
-  border: 1px solid #222222;
 }
-.teneo-detail-command-trigger {
-  font-family: monospace;
-  font-size: 16px;
-  color: #D3F372;
-  margin-bottom: 8px;
+.teneo-pricing-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-.teneo-detail-command-desc { font-size: 16px; color: #FAFCFC; margin-bottom: 12px; }
-.teneo-detail-command-params { display: flex; flex-wrap: wrap; gap: 8px; }
-.teneo-detail-command-param {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 12px;
-  background: #222222;
-  font-size: 13px;
-  color: #BAD3D8;
-  font-family: monospace;
-}
-.teneo-detail-command-param.required { border-left: 2px solid #D3F372; }
-.teneo-detail-command-param.optional { border-left: 2px solid #666; }
-
-/* Capabilities */
-.teneo-detail-capabilities { margin-top: 36px; }
-.teneo-detail-section-subtitle {
+.teneo-pricing-title {
+  font-family: 'PP Neue Montreal', sans-serif;
   font-size: 24px;
   font-weight: 400;
-  color: #FAFCFC;
-  margin-bottom: 24px;
+  color: #D3F372;
+  line-height: 1;
 }
-.teneo-detail-capability-item {
+.teneo-pricing-desc {
+  font-family: 'PP Neue Montreal', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #FFFFFF;
+  line-height: 1.3;
+}
+.teneo-pricing-grid {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
   gap: 10px;
-  padding: 12px 0;
-  border-bottom: 1px solid #222222;
 }
-.teneo-detail-capability-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #D3F372;
-  margin-top: 6px;
+.teneo-pricing-grid-head {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.teneo-pricing-grid-head .teneo-pricing-grid-cell {
+  background: #222222;
+  height: 61px;
+  display: flex;
+  align-items: center;
+  font-family: 'PP Neue Montreal', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #D3F372;
+  line-height: 1;
+  border: 1px solid #000000;
+}
+.teneo-pricing-grid-head .teneo-pricing-grid-cell--name {
+  padding: 0 48px;
+}
+.teneo-pricing-grid-head .teneo-pricing-grid-cell--price,
+.teneo-pricing-grid-head .teneo-pricing-grid-cell--unit {
+  justify-content: center;
+}
+.teneo-pricing-grid-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.teneo-pricing-grid-row .teneo-pricing-grid-cell {
+  background: #222222;
+  height: 102px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #000000;
+}
+.teneo-pricing-grid-cell--name {
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start !important;
+  justify-content: center;
+  padding: 0 48px;
+  gap: 8px;
+}
+.teneo-pricing-grid-cell--price,
+.teneo-pricing-grid-cell--unit {
+  width: 155px;
   flex-shrink: 0;
+  justify-content: center;
 }
-.teneo-detail-capability-name { font-size: 16px; color: #FAFCFC; font-weight: 500; margin-bottom: 4px; }
-.teneo-detail-capability-desc { font-size: 14px; color: #BAD3D8; }
+.teneo-pricing-cmd-trigger {
+  font-family: 'PP Neue Montreal', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1;
+}
+.teneo-pricing-cmd-desc {
+  font-family: 'PP Neue Montreal', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #FFFFFF;
+  line-height: 1;
+}
+.teneo-pricing-cmd-price,
+.teneo-pricing-cmd-unit {
+  font-family: 'PP Neue Montreal', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #FFFFFF;
+  line-height: 1;
+  text-align: center;
+}
+
+/* --- Commands & Capabilities --- */
+.teneo-detail-commands-section {
+  padding: 24px;
+  background: #09090a;
+  border: 1px solid #222222;
+  border-top: none;
+}
+.teneo-cc-group {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+.teneo-cc-group + .teneo-cc-group {
+  margin-top: 64px;
+}
+.teneo-cc-group-title {
+  font-family: 'PP Neue Montreal', sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: #FFFFFF;
+  line-height: 1.5;
+}
+.teneo-cc-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.teneo-cc-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 16px;
+  font-family: 'PP Neue Montreal', sans-serif;
+  font-weight: 400;
+  color: #FFFFFF;
+  line-height: 1;
+  cursor: default;
+}
+.teneo-cc-pill--cap {
+  font-size: 20px;
+  background: rgba(86, 114, 0, 0.3);
+  border: 1px solid #567200;
+  border-radius: 3px;
+}
+.teneo-cc-pill--cmd {
+  font-size: 20px;
+  background: rgba(0, 51, 255, 0.3);
+  border: 1px solid #0033FF;
+  border-radius: 4px;
+}
 
 /* --- FAQ --- */
 .teneo-detail-faq-section {
-  padding: 64px;
-  background: #09090a;
-  border: 1px solid #222222;
-  border-top: none;
+  padding: 48px 24px;
+  background: #050506;
 }
-.teneo-detail-faq-list { display: flex; flex-direction: column; gap: 8px; }
-.teneo-detail-faq-item { border: 1px solid #222222; overflow: hidden; }
+.teneo-detail-faq-list {
+  display: flex;
+  flex-direction: column;
+}
+.teneo-detail-faq-item {
+  overflow: hidden;
+}
+.teneo-detail-faq-item + .teneo-detail-faq-item {
+  border-top: 1px solid #222222;
+}
 .teneo-detail-faq-question {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 18px 24px;
+  gap: 12px;
+  padding: 16px 0;
   cursor: pointer;
+  font-family: 'PP Neue Montreal', sans-serif;
   font-size: 16px;
-  color: #FAFCFC;
+  font-weight: 500;
+  color: #FFFFFF;
+  line-height: 1.5;
   user-select: none;
-  transition: background 0.15s;
+  transition: opacity 0.15s;
 }
-.teneo-detail-faq-question:hover { background: rgba(255,255,255,0.03); }
+.teneo-detail-faq-question:hover { opacity: 0.8; }
 .teneo-detail-faq-chevron {
-  transition: transform 0.2s ease;
   flex-shrink: 0;
-  margin-left: 16px;
-  color: #FAFCFC;
+  transition: transform 0.2s ease;
 }
 .teneo-detail-faq-item.open .teneo-detail-faq-chevron { transform: rotate(180deg); }
 .teneo-detail-faq-answer {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease, padding 0.3s ease;
-  padding: 0 24px;
-  font-size: 16px;
+  padding: 0 0 0 24px;
+  font-family: 'PP Neue Montreal', sans-serif;
+  font-size: 14px;
   line-height: 1.5;
   color: #FAFCFC;
 }
 .teneo-detail-faq-item.open .teneo-detail-faq-answer {
   max-height: 500px;
-  padding: 0 24px 18px 24px;
+  padding: 0 0 16px 24px;
 }
 
 /* --- Loading / Error --- */
@@ -2938,25 +3004,35 @@
 
             return `
                 <div class="teneo-detail-tab-content${this.activeTab === 'pricing' ? ' active' : ''}" data-tab-content="pricing">
-                    <table class="teneo-detail-pricing-table">
-                        <thead>
-                            <tr><th>Command</th><th>Description</th><th>Price</th><th>Unit</th></tr>
-                        </thead>
-                        <tbody>
+                    <div class="teneo-pricing-wrapper">
+                        <div class="teneo-pricing-header">
+                            <div class="teneo-pricing-title">Pay per event</div>
+                            <div class="teneo-pricing-desc">Each command is priced individually based on the task it performs. Prices are shown per unit of work completed.</div>
+                        </div>
+                        <div class="teneo-pricing-grid">
+                            <div class="teneo-pricing-grid-head">
+                                <div class="teneo-pricing-grid-cell teneo-pricing-grid-cell--name">Event / Command</div>
+                                <div class="teneo-pricing-grid-cell teneo-pricing-grid-cell--price">Price</div>
+                                <div class="teneo-pricing-grid-cell teneo-pricing-grid-cell--unit">Unit</div>
+                            </div>
                             ${commands.map(cmd => {
                                 const price = cmd.pricePerUnit;
-                                const priceDisplay = price === 0
-                                    ? `<span class="teneo-detail-free-badge">Free</span>`
-                                    : `<span class="teneo-detail-price-badge">$${price}</span>`;
-                                return `<tr>
-                                    <td><code style="color:#D3F372;">${cmd.trigger}</code></td>
-                                    <td>${cmd.description || ''}</td>
-                                    <td>${priceDisplay}</td>
-                                    <td>${cmd.taskUnit || ''}</td>
-                                </tr>`;
+                                const priceDisplay = price === 0 ? 'Free' : `$${price}`;
+                                return `<div class="teneo-pricing-grid-row">
+                                    <div class="teneo-pricing-grid-cell teneo-pricing-grid-cell--name">
+                                        <span class="teneo-pricing-cmd-trigger">${cmd.trigger}</span>
+                                        <span class="teneo-pricing-cmd-desc">${cmd.description || ''}</span>
+                                    </div>
+                                    <div class="teneo-pricing-grid-cell teneo-pricing-grid-cell--price">
+                                        <span class="teneo-pricing-cmd-price">${priceDisplay}</span>
+                                    </div>
+                                    <div class="teneo-pricing-grid-cell teneo-pricing-grid-cell--unit">
+                                        <span class="teneo-pricing-cmd-unit">${cmd.taskUnit || '—'}</span>
+                                    </div>
+                                </div>`;
                             }).join('')}
-                        </tbody>
-                    </table>
+                        </div>
+                    </div>
                 </div>
             `;
         }
@@ -2968,41 +3044,27 @@
             return `
                 <div class="teneo-detail-tab-content${this.activeTab === 'commands' ? ' active' : ''}" data-tab-content="commands">
                     <div class="teneo-detail-commands-section">
-                        ${commands.length > 0 ? `
-                            <div class="teneo-detail-section-subtitle">Commands</div>
-                            <div class="teneo-detail-commands-list">
-                                ${commands.map(cmd => `
-                                    <div class="teneo-detail-command-card">
-                                        <div class="teneo-detail-command-trigger">/${cmd.trigger}${cmd.argument ? ' ' + cmd.argument : ''}</div>
-                                        <div class="teneo-detail-command-desc">${cmd.description || ''}</div>
-                                        ${cmd.parameters && cmd.parameters.length > 0 ? `
-                                            <div class="teneo-detail-command-params">
-                                                ${cmd.parameters.map(p => `
-                                                    <span class="teneo-detail-command-param ${p.required ? 'required' : 'optional'}">
-                                                        ${p.name}: ${p.type}${p.required ? ' *' : ''}
-                                                    </span>
-                                                `).join('')}
-                                            </div>
-                                        ` : ''}
-                                    </div>
-                                `).join('')}
-                            </div>
-                        ` : '<p style="color:#BAD3D8;">No commands available.</p>'}
-
                         ${capabilities.length > 0 ? `
-                            <div class="teneo-detail-capabilities">
-                                <div class="teneo-detail-section-subtitle">Capabilities</div>
-                                ${capabilities.map(cap => `
-                                    <div class="teneo-detail-capability-item">
-                                        <div class="teneo-detail-capability-dot"></div>
-                                        <div>
-                                            <div class="teneo-detail-capability-name">${cap.name || ''}</div>
-                                            <div class="teneo-detail-capability-desc">${cap.description || ''}</div>
-                                        </div>
-                                    </div>
-                                `).join('')}
+                            <div class="teneo-cc-group">
+                                <div class="teneo-cc-group-title">Capabilities</div>
+                                <div class="teneo-cc-pills">
+                                    ${capabilities.map(cap => `
+                                        <span class="teneo-cc-pill teneo-cc-pill--cap" title="${cap.description || ''}">${cap.name || ''}</span>
+                                    `).join('')}
+                                </div>
                             </div>
                         ` : ''}
+
+                        ${commands.length > 0 ? `
+                            <div class="teneo-cc-group">
+                                <div class="teneo-cc-group-title">Commands</div>
+                                <div class="teneo-cc-pills">
+                                    ${commands.map(cmd => `
+                                        <span class="teneo-cc-pill teneo-cc-pill--cmd" title="${cmd.description || ''}">${cmd.trigger}</span>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : '<p style="color:#BAD3D8;">No commands available.</p>'}
                     </div>
                 </div>
             `;
@@ -3019,8 +3081,8 @@
                             ${faqItems.map((item, i) => `
                                 <div class="teneo-detail-faq-item" data-faq="${i}">
                                     <div class="teneo-detail-faq-question">
+                                        <svg class="teneo-detail-faq-chevron" width="12" height="6" viewBox="0 0 12 6" fill="none"><path d="M1 1L6 5L11 1" stroke="#D3F372" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                         <span>${item.question}</span>
-                                        <svg class="teneo-detail-faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                     </div>
                                     <div class="teneo-detail-faq-answer">${item.answer}</div>
                                 </div>
