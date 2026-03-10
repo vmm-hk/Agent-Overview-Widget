@@ -1441,19 +1441,16 @@
 
 /* --- Two-Column Layout --- */
 .teneo-detail-columns {
-  display: flex;
-  gap: 0;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 2fr 4fr;
+  align-items: start;
 }
 .teneo-detail-col-left {
-  width: 441px;
-  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: 1px;
 }
 .teneo-detail-col-right {
-  flex: 1;
   min-width: 0;
 }
 
@@ -1808,7 +1805,7 @@
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
-  .teneo-detail-columns { flex-direction: column; }
+  .teneo-detail-columns { grid-template-columns: 1fr; }
   .teneo-detail-col-left { width: 100%; }
   .teneo-detail-about { border-top: none; }
   .teneo-detail-agent-name { font-size: 28px; }
