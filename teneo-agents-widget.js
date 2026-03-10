@@ -1407,6 +1407,7 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  border-right: 1px solid #222222;
 }
 .teneo-detail-tabs::-webkit-scrollbar { display: none; }
 .teneo-detail-tab {
@@ -1744,7 +1745,8 @@
 /* --- FAQ --- */
 .teneo-detail-faq-section {
   padding: 48px 24px;
-  background: #050506;
+  background: #09090a;
+  border: 1px solid #222222;
 }
 .teneo-detail-faq-list {
   display: flex;
