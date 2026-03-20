@@ -241,8 +241,8 @@
             gap: 11.85px;
             width: 100%;
             background: #25272B;
-            flex: none;
-            flex-grow: 0;
+            flex: 1;
+            flex-grow: 1;
             border-radius: 0px;
             border: 1px solid #1a1a1a;
             box-sizing: border-box;
@@ -532,7 +532,7 @@
         .teneo-widget-description {
             width: 100%;
             min-height: 0;
-            flex: none;
+            flex: 1;
             font-family: 'PPNeueMontreal', sans-serif;
             font-style: normal;
             font-weight: 400;
@@ -1361,6 +1361,7 @@
   margin: 24px 0 12px;
 }
 .teneo-detail-description h2:first-child { margin-top: 0; }
+.teneo-detail-about .teneo-detail-description { padding-top: 0; }
 .teneo-detail-description h3 {
   font-size: 18px;
   font-weight: 500;
@@ -1563,7 +1564,7 @@
 
 /* --- About Card --- */
 .teneo-detail-about {
-  padding: 64px;
+  padding: 36px 64px 64px;
   background: #09090a;
   border: 1px solid #222222;
   height: 100%;
@@ -1724,7 +1725,70 @@
   font-weight: 400;
   color: #FFFFFF;
   line-height: 1;
-  cursor: default;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Hover popup */
+.teneo-cc-popup {
+  display: none;
+  position: fixed;
+  width: 360px;
+  max-width: calc(100vw - 24px);
+  background: #000000;
+  border-radius: 8px;
+  padding: 24px;
+  z-index: 1000;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  pointer-events: none;
+  overflow: hidden;
+}
+.teneo-cc-popup.active {
+  display: block;
+}
+.teneo-cc-popup-title {
+  font-size: 16px;
+  font-weight: 400;
+  color: #4a7af7;
+  line-height: 1;
+  margin-bottom: 16px;
+  font-family: 'PP Neue Montreal', sans-serif;
+}
+.teneo-cc-popup--cap .teneo-cc-popup-title {
+  color: #1f8c64;
+  font-weight: 700;
+}
+.teneo-cc-popup-price {
+  font-size: 14px;
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.5;
+  margin-bottom: 16px;
+  font-family: 'PP Neue Montreal', sans-serif;
+}
+.teneo-cc-popup-desc {
+  font-size: 14px;
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.5;
+  margin-bottom: 16px;
+  font-family: 'PP Neue Montreal', sans-serif;
+}
+.teneo-cc-popup-usage {
+  background: #1d2b63;
+  border: 1px solid #2d418d;
+  border-radius: 0;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-family: 'PP Neue Montreal', sans-serif;
+  color: #ffffff;
+  line-height: 1.5;
+}
+.teneo-cc-popup-usage-label {
+  color: #ffffff;
+  font-family: 'PP Neue Montreal', sans-serif;
+  font-size: 12px;
+  margin-bottom: 0;
 }
 .teneo-cc-pill--cap {
   font-size: 20px;
@@ -1806,7 +1870,8 @@
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .teneo-detail-columns { grid-template-columns: 1fr; }
-  .teneo-detail-col-left { width: 100%; }
+  .teneo-detail-col-left { width: 100%; order: 2; }
+  .teneo-detail-col-right { order: 1; }
   .teneo-detail-about { border-top: none; }
   .teneo-detail-agent-name { font-size: 28px; }
   .teneo-detail-chat-btn { font-size: 18px; padding: 10px 20px; }
@@ -1830,6 +1895,40 @@
   .teneo-detail-explorer-name { font-size: 18px; }
   .teneo-detail-stat-value, .teneo-detail-stat-label, .teneo-detail-card-title, .teneo-detail-pricing-value { font-size: 20px; }
   .teneo-detail-commands-section, .teneo-detail-faq-section { padding: 36px; }
+
+  /* Pricing table responsive */
+  .teneo-pricing-wrapper { padding: 16px; }
+  .teneo-pricing-grid-head { display: none; }
+  .teneo-pricing-grid-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  .teneo-pricing-grid-cell--price,
+  .teneo-pricing-grid-cell--unit {
+    width: 100%;
+    min-height: auto;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 12px 16px;
+  }
+  .teneo-pricing-grid-cell--price::before {
+    content: 'Price';
+    font-size: 14px;
+    color: #9CA3AF;
+    font-weight: 400;
+  }
+  .teneo-pricing-grid-cell--unit::before {
+    content: 'Unit';
+    font-size: 14px;
+    color: #9CA3AF;
+    font-weight: 400;
+  }
+  .teneo-pricing-grid-cell--name {
+    padding: 16px;
+  }
+  .teneo-pricing-grid-head .teneo-pricing-grid-cell--name {
+    padding: 0 16px;
+  }
 }
 @media (max-width: 480px) {
   .teneo-detail-avatar { width: 56px; height: 56px; font-size: 22px; }
@@ -2217,7 +2316,8 @@
             const hasCategories = agent._categories && agent._categories.length > 0;
 
             return `
-                <div class="teneo-widget-card ${isOnline ? 'online' : 'offline'} ${hasCategories ? 'teneo-widget-card-has-categories' : ''}" id="${cardId}">
+                <a href="${targetUrl}" target="${targetAttr}" class="teneo-widget-card-link" style="text-decoration:none;color:inherit;display:flex;height:100%;">
+                <div class="teneo-widget-card ${isOnline ? 'online' : 'offline'} ${hasCategories ? 'teneo-widget-card-has-categories' : ''}" id="${cardId}" style="cursor:pointer;">
                     <div class="teneo-widget-card-content">
                         <div class="teneo-widget-card-top">
                             <div class="teneo-widget-header-card">
@@ -2253,16 +2353,17 @@
                             </div>
                             ` : ''}
                             <div class="teneo-widget-description">
-                                <p>${agent.description || 'No description available'}</p>
+                                <p>${agent.short_description || agent.description || 'No description available'}</p>
                             </div>
                         </div>
                         <div class="teneo-widget-actions">
-                            <a href="${targetUrl}" target="${targetAttr}" class="teneo-widget-btn">
+                            <span class="teneo-widget-btn">
                                 <div class="btn-text">View Agent</div>
-                            </a>
+                            </span>
                         </div>
                     </div>
                 </div>
+                </a>
             `;
         }
 
@@ -2899,7 +3000,7 @@
                             <span class="teneo-detail-status-label">${isOnline ? 'Online' : 'Offline'}</span>
                             <span class="teneo-detail-status-dot"></span>
                         </div>
-                        <a href="${chatLink.url}" target="${chatLink.sameTab ? '_self' : '_blank'}" class="teneo-detail-chat-btn">Chat now</a>
+                        <a href="${chatLink.url}" target="${chatLink.sameTab ? '_self' : '_blank'}" class="teneo-detail-chat-btn">Try it now</a>
                     </div>
                 </div>
             `;
@@ -3015,8 +3116,9 @@
                                 <div class="teneo-pricing-grid-cell teneo-pricing-grid-cell--unit">Unit</div>
                             </div>
                             ${commands.map(cmd => {
-                                const price = cmd.pricePerUnit;
+                                const price = (cmd.pricePerUnit != null && cmd.pricePerUnit !== undefined) ? cmd.pricePerUnit : 0.001;
                                 const priceDisplay = price === 0 ? 'Free' : `$${price}`;
+                                const unit = cmd.taskUnit || 'per-query';
                                 return `<div class="teneo-pricing-grid-row">
                                     <div class="teneo-pricing-grid-cell teneo-pricing-grid-cell--name">
                                         <span class="teneo-pricing-cmd-trigger">${cmd.trigger}</span>
@@ -3026,7 +3128,7 @@
                                         <span class="teneo-pricing-cmd-price">${priceDisplay}</span>
                                     </div>
                                     <div class="teneo-pricing-grid-cell teneo-pricing-grid-cell--unit">
-                                        <span class="teneo-pricing-cmd-unit">${cmd.taskUnit || '—'}</span>
+                                        <span class="teneo-pricing-cmd-unit">${unit}</span>
                                     </div>
                                 </div>`;
                             }).join('')}
@@ -3048,7 +3150,13 @@
                                 <div class="teneo-cc-group-title">Capabilities</div>
                                 <div class="teneo-cc-pills">
                                     ${capabilities.map(cap => `
-                                        <span class="teneo-cc-pill teneo-cc-pill--cap" title="${cap.description || ''}">${cap.name || ''}</span>
+                                        <span class="teneo-cc-pill teneo-cc-pill--cap">
+                                            ${cap.name || ''}
+                                            ${cap.description ? `<div class="teneo-cc-popup teneo-cc-popup--cap">
+                                                <div class="teneo-cc-popup-title">${this.escapeHtml(cap.name || '')}</div>
+                                                <div class="teneo-cc-popup-desc">${this.escapeHtml(cap.description)}</div>
+                                            </div>` : ''}
+                                        </span>
                                     `).join('')}
                                 </div>
                             </div>
@@ -3058,9 +3166,24 @@
                             <div class="teneo-cc-group">
                                 <div class="teneo-cc-group-title">Commands</div>
                                 <div class="teneo-cc-pills">
-                                    ${commands.map(cmd => `
-                                        <span class="teneo-cc-pill teneo-cc-pill--cmd" title="${cmd.description || ''}">${cmd.trigger}</span>
-                                    `).join('')}
+                                    ${commands.map(cmd => {
+                                        const price = (cmd.pricePerUnit != null && cmd.pricePerUnit !== undefined) ? cmd.pricePerUnit : 0.001;
+                                        const priceDisplay = price === 0 ? 'Free' : `$ ${price}`;
+                                        const unit = cmd.taskUnit || 'per-query';
+                                        const usage = cmd.argument ? `${cmd.trigger} ${cmd.argument}` : cmd.trigger;
+                                        return `<span class="teneo-cc-pill teneo-cc-pill--cmd">
+                                            ${cmd.trigger}
+                                            <div class="teneo-cc-popup">
+                                                <div class="teneo-cc-popup-title">${this.escapeHtml(usage)}</div>
+                                                <div class="teneo-cc-popup-price">Price: ${priceDisplay} ${unit}</div>
+                                                <div class="teneo-cc-popup-desc">${this.escapeHtml(cmd.description || '')}</div>
+                                                ${cmd.argument ? `<div class="teneo-cc-popup-usage">
+                                                    <div class="teneo-cc-popup-usage-label">Usage:</div>
+                                                    ${this.escapeHtml(usage)}
+                                                </div>` : ''}
+                                            </div>
+                                        </span>`;
+                                    }).join('')}
                                 </div>
                             </div>
                         ` : '<p style="color:#BAD3D8;">No commands available.</p>'}
@@ -3116,6 +3239,58 @@
                         setTimeout(() => { btn.innerHTML = orig; }, 1500);
                     });
                 });
+            });
+
+            // Popup positioning for command/capability pills
+            this.container.querySelectorAll('.teneo-cc-pill').forEach(pill => {
+                const popup = pill.querySelector('.teneo-cc-popup');
+                if (!popup) return;
+
+                const showPopup = () => {
+                    popup.classList.add('active');
+                    const pillRect = pill.getBoundingClientRect();
+                    const popupWidth = popup.offsetWidth;
+                    const popupHeight = popup.offsetHeight;
+
+                    // Position above the pill by default
+                    let top = pillRect.top - popupHeight - 8;
+                    let left = pillRect.left + (pillRect.width / 2) - (popupWidth / 2);
+
+                    // If it goes above viewport, show below instead
+                    if (top < 8) {
+                        top = pillRect.bottom + 8;
+                    }
+
+                    // Clamp horizontally
+                    if (left < 12) left = 12;
+                    if (left + popupWidth > window.innerWidth - 12) {
+                        left = window.innerWidth - popupWidth - 12;
+                    }
+
+                    popup.style.top = top + 'px';
+                    popup.style.left = left + 'px';
+                };
+
+                const hidePopup = () => {
+                    popup.classList.remove('active');
+                };
+
+                pill.addEventListener('mouseenter', showPopup);
+                pill.addEventListener('mouseleave', hidePopup);
+                pill.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    const isVisible = popup.classList.contains('active');
+                    // Close any other open popups
+                    this.container.querySelectorAll('.teneo-cc-popup.active').forEach(p => p.classList.remove('active'));
+                    if (!isVisible) showPopup();
+                });
+            });
+
+            // Close popups on tap outside (mobile)
+            document.addEventListener('touchstart', (e) => {
+                if (!e.target.closest('.teneo-cc-pill')) {
+                    this.container.querySelectorAll('.teneo-cc-popup.active').forEach(p => p.classList.remove('active'));
+                }
             });
         }
 
@@ -3208,6 +3383,11 @@
                 } catch (e) { continue; }
             }
             throw new Error('All gateways failed');
+        }
+
+        escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
         renderMarkdown(text) {
